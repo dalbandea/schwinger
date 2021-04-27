@@ -1,0 +1,461 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+BASE	rand/ranlxd.c	353;"	d	file:
+BASE	rand/ranlxs.c	351;"	d	file:
+CC	Makefile	/^CC = gcc -std=c99 -Wall -O3$/;"	m
+DELTACG	hmc.h	13;"	d
+DS_G1	fields.c	/^double DS_G1(int i)$/;"	f
+DS_G2	fields.c	/^double DS_G2(int i)$/;"	f
+FP_ILOGB0	complex/mathdef.h	38;"	d
+FP_ILOGBNAN	complex/mathdef.h	39;"	d
+GRIDPOINTS	lattice.h	10;"	d
+I	complex/complex.h	57;"	d
+I	complex/complex.h	58;"	d
+INFINITY	complex/mathdef.h	35;"	d
+ITER_MAX	hmc.h	11;"	d
+LF_inner_update	leapfrog2.c	/^void LF_inner_update(const int n2, const double tau) {$/;"	f
+LF_integrator	leapfrog2.c	/^void LF_integrator(const int n1, const int n2, const double tau) {$/;"	f
+MASK	rand/ranlxd.c	354;"	d	file:
+MASK	rand/ranlxs.c	352;"	d	file:
+MN2_inner_update	2MN_integrator.c	/^void MN2_inner_update(const int n2, const double tau, const double lambda) {$/;"	f
+MN2_integrator	2MN_integrator.c	/^void MN2_integrator(const int n1, const int n2, const double tau, const double lambda) {$/;"	f
+MONITOR_CG_PROGRESS	linalg.h	7;"	d
+M_PI	dirac.c	26;"	d	file:
+M_PI	fields.c	4;"	d	file:
+M_PI	measurements.c	12;"	d	file:
+M_PI	rand/gauss.c	7;"	d	file:
+M_PI_2	measurements.c	13;"	d	file:
+N	statistics.h	/^  int N;$/;"	m	struct:statistics_data
+NXD	rand/testlx.c	21;"	d	file:
+NXS	rand/testlx.c	20;"	d	file:
+PF1_force	2MN_integrator.c	/^double PF1_force = 0;$/;"	v
+PF2_force	2MN_integrator.c	/^double PF2_force = 0;$/;"	v
+R	hmc.c	/^int R;$/;"	v
+R1	measurements.c	/^spinor S0[GRIDPOINTS], S[GRIDPOINTS], R1[GRIDPOINTS], R2[GRIDPOINTS];$/;"	v
+R2	measurements.c	/^spinor S0[GRIDPOINTS], S[GRIDPOINTS], R1[GRIDPOINTS], R2[GRIDPOINTS];$/;"	v
+S	measurements.c	/^spinor S0[GRIDPOINTS], S[GRIDPOINTS], R1[GRIDPOINTS], R2[GRIDPOINTS];$/;"	v
+S0	measurements.c	/^spinor S0[GRIDPOINTS], S[GRIDPOINTS], R1[GRIDPOINTS], R2[GRIDPOINTS];$/;"	v
+STEP	rand/ranlxd.c	376;"	d	file:
+STEP	rand/ranlxd.c	67;"	d	file:
+STEP	rand/ranlxs.c	374;"	d	file:
+STEP	rand/ranlxs.c	67;"	d	file:
+S_G	fields.c	/^double S_G(int i)$/;"	f
+X1	lattice.h	8;"	d
+X2	lattice.h	9;"	d
+_2MN_INTEGRATOR_H	2MN_integrator.h	23;"	d
+_BSD_SOURCE	complex/features.h	138;"	d
+_BSD_SOURCE	complex/features.h	139;"	d
+_BSD_SOURCE	complex/features.h	150;"	d
+_COMPLEX_H	complex/complex.h	32;"	d
+_Complex	complex/complex.h	45;"	d
+_Complex_I	complex/complex.h	53;"	d
+_DIRAC_H	dirac.h	24;"	d
+_FEATURES_H	complex/features.h	20;"	d
+_FIELDS_H	fields.h	23;"	d
+_GAUSS_H	rand/gauss.h	2;"	d
+_HMC_H	hmc.h	2;"	d
+_INTEGRATOR_H	rec_lf_integrator.h	23;"	d
+_ISOC99_SOURCE	complex/features.h	126;"	d
+_ISOC99_SOURCE	complex/features.h	127;"	d
+_LARGEFILE64_SOURCE	complex/features.h	136;"	d
+_LARGEFILE64_SOURCE	complex/features.h	137;"	d
+_LARGEFILE_SOURCE	complex/features.h	200;"	d
+_LARGEFILE_SOURCE	complex/features.h	201;"	d
+_LATTICE_H	lattice.h	2;"	d
+_LEAPFROG2_H	leapfrog2.h	23;"	d
+_LEAPFROG_H	leapfrog.h	2;"	d
+_LINALG_H	linalg.h	2;"	d
+_MATH_H_MATHDEF	complex/mathdef.h	24;"	d
+_MEASUREMENTS_H	measurements.h	2;"	d
+_Mdouble_	complex/complex.h	108;"	d
+_Mdouble_	complex/complex.h	116;"	d
+_Mdouble_	complex/complex.h	73;"	d
+_Mdouble_	complex/complex.h	76;"	d
+_Mdouble_	complex/complex.h	83;"	d
+_Mdouble_	complex/complex.h	90;"	d
+_Mdouble_complex_	complex/cmathcalls.h	48;"	d
+_Mfloat_	complex/complex.h	81;"	d
+_Mlong_double_	complex/complex.h	106;"	d
+_POSIX_C_SOURCE	complex/features.h	130;"	d
+_POSIX_C_SOURCE	complex/features.h	131;"	d
+_POSIX_C_SOURCE	complex/features.h	169;"	d
+_POSIX_C_SOURCE	complex/features.h	171;"	d
+_POSIX_SOURCE	complex/features.h	128;"	d
+_POSIX_SOURCE	complex/features.h	129;"	d
+_POSIX_SOURCE	complex/features.h	167;"	d
+_SVID_SOURCE	complex/features.h	140;"	d
+_SVID_SOURCE	complex/features.h	141;"	d
+_SVID_SOURCE	complex/features.h	151;"	d
+_SYS_CDEFS_H	complex/cdefs.h	20;"	d
+_XOPEN_SOURCE	complex/features.h	132;"	d
+_XOPEN_SOURCE	complex/features.h	133;"	d
+_XOPEN_SOURCE_EXTENDED	complex/features.h	134;"	d
+_XOPEN_SOURCE_EXTENDED	complex/features.h	135;"	d
+__ASMNAME	complex/cdefs.h	152;"	d
+__ASMNAME2	complex/cdefs.h	153;"	d
+__BEGIN_DECLS	complex/cdefs.h	80;"	d
+__BEGIN_DECLS	complex/cdefs.h	83;"	d
+__BEGIN_NAMESPACE_C99	complex/cdefs.h	107;"	d
+__BEGIN_NAMESPACE_C99	complex/cdefs.h	97;"	d
+__BEGIN_NAMESPACE_STD	complex/cdefs.h	104;"	d
+__BEGIN_NAMESPACE_STD	complex/cdefs.h	94;"	d
+__CONCAT	complex/cdefs.h	70;"	d
+__END_DECLS	complex/cdefs.h	81;"	d
+__END_DECLS	complex/cdefs.h	84;"	d
+__END_NAMESPACE_C99	complex/cdefs.h	108;"	d
+__END_NAMESPACE_C99	complex/cdefs.h	98;"	d
+__END_NAMESPACE_STD	complex/cdefs.h	105;"	d
+__END_NAMESPACE_STD	complex/cdefs.h	95;"	d
+__FAVOR_BSD	complex/features.h	103;"	d
+__FAVOR_BSD	complex/features.h	121;"	d
+__GLIBC_HAVE_LONG_LONG	complex/features.h	289;"	d
+__GLIBC_MINOR__	complex/features.h	265;"	d
+__GLIBC_PREREQ	complex/features.h	281;"	d
+__GLIBC__	complex/features.h	264;"	d
+__GNUC_PREREQ	complex/features.h	275;"	d
+__GNUC_PREREQ	complex/features.h	278;"	d
+__GNU_LIBRARY__	complex/features.h	259;"	d
+__GNU_LIBRARY__	complex/features.h	260;"	d
+__KERNEL_STRICT_NAMES	complex/features.h	104;"	d
+__KERNEL_STRICT_NAMES	complex/features.h	109;"	d
+__MATHCALL	complex/complex.h	120;"	d
+__MATHCALL	complex/complex.h	65;"	d
+__MATHDECL	complex/complex.h	119;"	d
+__MATHDECL	complex/complex.h	67;"	d
+__MATHDECL_1	complex/complex.h	100;"	d
+__MATHDECL_1	complex/complex.h	101;"	d
+__MATHDECL_1	complex/complex.h	118;"	d
+__MATHDECL_1	complex/complex.h	70;"	d
+__MATH_PRECNAME	complex/complex.h	110;"	d
+__MATH_PRECNAME	complex/complex.h	117;"	d
+__MATH_PRECNAME	complex/complex.h	74;"	d
+__MATH_PRECNAME	complex/complex.h	77;"	d
+__MATH_PRECNAME	complex/complex.h	85;"	d
+__MATH_PRECNAME	complex/complex.h	91;"	d
+__P	complex/cdefs.h	35;"	d
+__P	complex/cdefs.h	48;"	d
+__P	complex/cdefs.h	58;"	d
+__PMT	complex/cdefs.h	36;"	d
+__PMT	complex/cdefs.h	51;"	d
+__PMT	complex/cdefs.h	59;"	d
+__REDIRECT	complex/cdefs.h	151;"	d
+__STDC_IEC_559_COMPLEX__	complex/features.h	248;"	d
+__STDC_IEC_559__	complex/features.h	247;"	d
+__STDC_ISO_10646__	complex/features.h	251;"	d
+__STRING	complex/cdefs.h	71;"	d
+__THROW	complex/cdefs.h	44;"	d
+__THROW	complex/cdefs.h	46;"	d
+__THROW	complex/cdefs.h	57;"	d
+__USE_ANSI	complex/features.h	113;"	d
+__USE_BSD	complex/features.h	231;"	d
+__USE_BSD	complex/features.h	98;"	d
+__USE_EXTERN_INLINES	complex/features.h	310;"	d
+__USE_FILE_OFFSET64	complex/features.h	223;"	d
+__USE_FILE_OFFSET64	complex/features.h	97;"	d
+__USE_GNU	complex/features.h	101;"	d
+__USE_GNU	complex/features.h	239;"	d
+__USE_ISOC99	complex/features.h	160;"	d
+__USE_ISOC99	complex/features.h	204;"	d
+__USE_ISOC99	complex/features.h	205;"	d
+__USE_ISOC99	complex/features.h	86;"	d
+__USE_LARGEFILE	complex/features.h	215;"	d
+__USE_LARGEFILE	complex/features.h	301;"	d
+__USE_LARGEFILE	complex/features.h	95;"	d
+__USE_LARGEFILE64	complex/features.h	219;"	d
+__USE_LARGEFILE64	complex/features.h	302;"	d
+__USE_LARGEFILE64	complex/features.h	96;"	d
+__USE_MISC	complex/features.h	100;"	d
+__USE_MISC	complex/features.h	227;"	d
+__USE_POSIX	complex/features.h	176;"	d
+__USE_POSIX	complex/features.h	87;"	d
+__USE_POSIX199309	complex/features.h	184;"	d
+__USE_POSIX199309	complex/features.h	89;"	d
+__USE_POSIX199506	complex/features.h	188;"	d
+__USE_POSIX199506	complex/features.h	90;"	d
+__USE_POSIX2	complex/features.h	180;"	d
+__USE_POSIX2	complex/features.h	88;"	d
+__USE_REENTRANT	complex/features.h	102;"	d
+__USE_REENTRANT	complex/features.h	243;"	d
+__USE_SVID	complex/features.h	235;"	d
+__USE_SVID	complex/features.h	99;"	d
+__USE_UNIX98	complex/features.h	199;"	d
+__USE_UNIX98	complex/features.h	93;"	d
+__USE_XOPEN	complex/features.h	196;"	d
+__USE_XOPEN	complex/features.h	91;"	d
+__USE_XOPEN2K	complex/features.h	192;"	d
+__USE_XOPEN2K	complex/features.h	203;"	d
+__USE_XOPEN2K	complex/features.h	94;"	d
+__USE_XOPEN_EXTENDED	complex/features.h	198;"	d
+__USE_XOPEN_EXTENDED	complex/features.h	209;"	d
+__USE_XOPEN_EXTENDED	complex/features.h	92;"	d
+__USING_NAMESPACE_C99	complex/cdefs.h	109;"	d
+__USING_NAMESPACE_C99	complex/cdefs.h	99;"	d
+__USING_NAMESPACE_STD	complex/cdefs.h	106;"	d
+__USING_NAMESPACE_STD	complex/cdefs.h	96;"	d
+__attribute__	complex/cdefs.h	167;"	d
+__attribute_deprecated__	complex/cdefs.h	201;"	d
+__attribute_deprecated__	complex/cdefs.h	203;"	d
+__attribute_format_arg__	complex/cdefs.h	213;"	d
+__attribute_format_arg__	complex/cdefs.h	215;"	d
+__attribute_format_strfmon__	complex/cdefs.h	223;"	d
+__attribute_format_strfmon__	complex/cdefs.h	226;"	d
+__attribute_malloc__	complex/cdefs.h	174;"	d
+__attribute_malloc__	complex/cdefs.h	176;"	d
+__attribute_noinline__	complex/cdefs.h	193;"	d
+__attribute_noinline__	complex/cdefs.h	196;"	d
+__attribute_pure__	complex/cdefs.h	183;"	d
+__attribute_pure__	complex/cdefs.h	185;"	d
+__attribute_used__	complex/cdefs.h	192;"	d
+__attribute_used__	complex/cdefs.h	195;"	d
+__bounded	complex/cdefs.h	115;"	d
+__const	complex/cdefs.h	61;"	d
+__extension__	complex/cdefs.h	234;"	d
+__flexarr	complex/cdefs.h	124;"	d
+__flexarr	complex/cdefs.h	127;"	d
+__flexarr	complex/cdefs.h	130;"	d
+__flexarr	complex/cdefs.h	133;"	d
+__inline	complex/cdefs.h	55;"	d
+__long_double_t	complex/cdefs.h	75;"	d
+__ptr_t	complex/cdefs.h	74;"	d
+__ptrvalue	complex/cdefs.h	117;"	d
+__restrict	complex/cdefs.h	239;"	d
+__restrict_arr	complex/cdefs.h	246;"	d
+__restrict_arr	complex/cdefs.h	249;"	d
+__restrict_arr	complex/cdefs.h	252;"	d
+__restrict_arr	complex/cdefs.h	255;"	d
+__signed	complex/cdefs.h	62;"	d
+__stub___kernel_cosl	complex/stubs.h	10;"	d
+__stub___kernel_sinl	complex/stubs.h	11;"	d
+__stub___kernel_tanl	complex/stubs.h	12;"	d
+__stub_chflags	complex/stubs.h	13;"	d
+__stub_fattach	complex/stubs.h	14;"	d
+__stub_fchflags	complex/stubs.h	15;"	d
+__stub_fdetach	complex/stubs.h	16;"	d
+__stub_gtty	complex/stubs.h	17;"	d
+__stub_lchmod	complex/stubs.h	18;"	d
+__stub_lutimes	complex/stubs.h	19;"	d
+__stub_revoke	complex/stubs.h	20;"	d
+__stub_setlogin	complex/stubs.h	21;"	d
+__stub_sstk	complex/stubs.h	22;"	d
+__stub_stty	complex/stubs.h	23;"	d
+__unbounded	complex/cdefs.h	116;"	d
+__volatile	complex/cdefs.h	63;"	d
+accept	hmc.c	/^int accept(const double exphdiff)$/;"	f
+add	linalg.c	/^void add(spinor *Q, spinor *R, spinor *S)$/;"	f
+add_statistics_entry	statistics.c	/^void add_statistics_entry(statistics_data *data, double entry)$/;"	f
+assign	linalg.c	/^void assign(spinor *R, spinor *S)$/;"	f
+assign_add_mul	linalg.c	/^void assign_add_mul(spinor *P, spinor *Q, complex double c)$/;"	f
+assign_add_mul_r	linalg.c	/^void assign_add_mul_r(spinor *P, spinor *Q, double c)$/;"	f
+assign_diff_mul	linalg.c	/^void assign_diff_mul(spinor *R, spinor *S, complex double c){$/;"	f
+assign_mul_add_r	linalg.c	/^void assign_mul_add_r(spinor *R, spinor *S, double c)$/;"	f
+autocorrelation_Gamma	statistics.c	/^double autocorrelation_Gamma(double *measurements, double mean, int N, int n)$/;"	f
+autocorrelation_time	statistics.c	/^double autocorrelation_time(double *measurements, int N)$/;"	f
+beta	qed.c	/^double beta = 1.0;       \/\/Coupling constant for the gauge field$/;"	v
+beta	test1.c	/^double beta   = 1.0;       \/\/Coupling constant for the gauge field$/;"	v
+beta	test2.c	/^double beta   = 1.0;       \/\/Coupling constant for the gauge field$/;"	v
+c1	rand/ranlxd.c	/^   float c1,c2,c3,c4;$/;"	m	struct:__anon1	file:
+c1	rand/ranlxd.c	/^   int c1,c2,c3,c4;$/;"	m	struct:__anon4	file:
+c1	rand/ranlxd.c	/^   vec_t c1,c2;$/;"	m	struct:__anon2	file:
+c1	rand/ranlxd.c	/^   vec_t c1,c2;$/;"	m	struct:__anon5	file:
+c1	rand/ranlxs.c	/^   float c1,c2,c3,c4;$/;"	m	struct:__anon7	file:
+c1	rand/ranlxs.c	/^   int c1,c2,c3,c4;$/;"	m	struct:__anon10	file:
+c1	rand/ranlxs.c	/^   vec_t c1,c2;$/;"	m	struct:__anon11	file:
+c1	rand/ranlxs.c	/^   vec_t c1,c2;$/;"	m	struct:__anon8	file:
+c2	rand/ranlxd.c	/^   float c1,c2,c3,c4;$/;"	m	struct:__anon1	file:
+c2	rand/ranlxd.c	/^   int c1,c2,c3,c4;$/;"	m	struct:__anon4	file:
+c2	rand/ranlxd.c	/^   vec_t c1,c2;$/;"	m	struct:__anon2	file:
+c2	rand/ranlxd.c	/^   vec_t c1,c2;$/;"	m	struct:__anon5	file:
+c2	rand/ranlxs.c	/^   float c1,c2,c3,c4;$/;"	m	struct:__anon7	file:
+c2	rand/ranlxs.c	/^   int c1,c2,c3,c4;$/;"	m	struct:__anon10	file:
+c2	rand/ranlxs.c	/^   vec_t c1,c2;$/;"	m	struct:__anon11	file:
+c2	rand/ranlxs.c	/^   vec_t c1,c2;$/;"	m	struct:__anon8	file:
+c3	rand/ranlxd.c	/^   float c1,c2,c3,c4;$/;"	m	struct:__anon1	file:
+c3	rand/ranlxd.c	/^   int c1,c2,c3,c4;$/;"	m	struct:__anon4	file:
+c3	rand/ranlxs.c	/^   float c1,c2,c3,c4;$/;"	m	struct:__anon7	file:
+c3	rand/ranlxs.c	/^   int c1,c2,c3,c4;$/;"	m	struct:__anon10	file:
+c4	rand/ranlxd.c	/^   float c1,c2,c3,c4;$/;"	m	struct:__anon1	file:
+c4	rand/ranlxd.c	/^   int c1,c2,c3,c4;$/;"	m	struct:__anon4	file:
+c4	rand/ranlxs.c	/^   float c1,c2,c3,c4;$/;"	m	struct:__anon7	file:
+c4	rand/ranlxs.c	/^   int c1,c2,c3,c4;$/;"	m	struct:__anon10	file:
+calculate_statistics_array	statistics.c	/^void calculate_statistics_array(statistics_data *data, int array_size)$/;"	f
+calculate_statistics_data	statistics.c	/^void calculate_statistics_data(statistics_data *data)$/;"	f
+calculatelinkvars	fields.c	/^int calculatelinkvars()$/;"	f
+carry	rand/ranlxd.c	/^static vec_t carry;$/;"	v	file:
+carry	rand/ranlxd.c	/^static vec_t one,one_bit,carry;$/;"	v	file:
+carry	rand/ranlxs.c	/^static vec_t carry;$/;"	v	file:
+carry	rand/ranlxs.c	/^static vec_t one,one_bit,carry;$/;"	v	file:
+cconj	complex/complex.h	123;"	d
+cconjf	complex/complex.h	124;"	d
+cconjl	complex/complex.h	125;"	d
+cg	linalg.c	/^int cg(spinor *P, spinor *Q, int max_iter, double eps_sq, matrix_mult f)$/;"	f
+chiral_condensate	measurements.c	/^double chiral_condensate()$/;"	f
+coldstart	fields.c	/^void coldstart()$/;"	f
+complex	complex/complex.h	48;"	d
+dble_vec_t	rand/ranlxd.c	/^} dble_vec_t __attribute__ ((aligned (16)));$/;"	t	typeref:struct:__anon2	file:
+dble_vec_t	rand/ranlxd.c	/^} dble_vec_t;$/;"	t	typeref:struct:__anon5	file:
+dble_vec_t	rand/ranlxs.c	/^} dble_vec_t __attribute__ ((aligned (16)));$/;"	t	typeref:struct:__anon8	file:
+dble_vec_t	rand/ranlxs.c	/^} dble_vec_t;$/;"	t	typeref:struct:__anon11	file:
+define_constants	rand/ranlxd.c	/^static void define_constants()$/;"	f	file:
+define_constants	rand/ranlxs.c	/^static void define_constants()$/;"	f	file:
+diff	linalg.c	/^void diff(spinor *Q, spinor *R, spinor *S)$/;"	f
+echo_sim_params	qed.c	/^void echo_sim_params()$/;"	f
+error	rand/ranlxd.c	/^static void error(int no)$/;"	f	file:
+error	rand/ranlxs.c	/^static void error(int no)$/;"	f	file:
+error	statistics.h	/^  double sum, square_sum, mean, error;$/;"	m	struct:statistics_data
+g_R	fields.h	35;"	d
+g_X	fields.c	/^spinor g_fermion[GRIDPOINTS], g_fermion2[GRIDPOINTS], g_X[GRIDPOINTS], g_gam5DX[GRIDPOINTS], g_temp[GRIDPOINTS];$/;"	v
+g_cgiterations1	hmc.c	/^int g_cgiterations1;$/;"	v
+g_cgiterations2	hmc.c	/^int g_cgiterations2;$/;"	v
+g_fermion	fields.c	/^spinor g_fermion[GRIDPOINTS], g_fermion2[GRIDPOINTS], g_X[GRIDPOINTS], g_gam5DX[GRIDPOINTS], g_temp[GRIDPOINTS];$/;"	v
+g_fermion2	fields.c	/^spinor g_fermion[GRIDPOINTS], g_fermion2[GRIDPOINTS], g_X[GRIDPOINTS], g_gam5DX[GRIDPOINTS], g_temp[GRIDPOINTS];$/;"	v
+g_gam5DX	fields.c	/^spinor g_fermion[GRIDPOINTS], g_fermion2[GRIDPOINTS], g_X[GRIDPOINTS], g_gam5DX[GRIDPOINTS], g_temp[GRIDPOINTS];$/;"	v
+g_intermediate	qed.c	/^int g_intermediate = 0;    \/\/Number of MC updates between the measurements$/;"	v
+g_intermediate	test1.c	/^int g_intermediate = 0;    \/\/Number of MC updates between the measurements$/;"	v
+g_intermediate	test2.c	/^int g_intermediate = 0;    \/\/Number of MC updates between the measurements$/;"	v
+g_mass	qed.c	/^double g_mass = -0.06;\/\/3125;\/\/23125;       \/\/Fermion mass$/;"	v
+g_mass	test1.c	/^double g_mass = 0.1;       \/\/Fermion mass$/;"	v
+g_mass	test2.c	/^double g_mass = 0.1;       \/\/Fermion mass$/;"	v
+g_measurements	qed.c	/^int g_measurements = 1000;  \/\/Number of measurements (statistically independent configurations)$/;"	v
+g_measurements	test1.c	/^int g_measurements = 100;  \/\/Number of measurements (statistically independent configurations)$/;"	v
+g_measurements	test2.c	/^int g_measurements = 100;  \/\/Number of measurements (statistically independent configurations)$/;"	v
+g_musqr	qed.c	/^double g_musqr = 0.7;$/;"	v
+g_steps	test1.c	/^int    g_steps    = 10;    \/\/Number of steps in the molecular dynamics chain$/;"	v
+g_steps	test2.c	/^int    g_steps    = 10;    \/\/Number of steps in the molecular dynamics chain$/;"	v
+g_stepsize	test1.c	/^double g_stepsize = 0.1;   \/\/Size of each step$/;"	v
+g_stepsize	test2.c	/^double g_stepsize = 0.1;   \/\/Size of each step$/;"	v
+g_temp	fields.c	/^spinor g_fermion[GRIDPOINTS], g_fermion2[GRIDPOINTS], g_X[GRIDPOINTS], g_gam5DX[GRIDPOINTS], g_temp[GRIDPOINTS];$/;"	v
+g_thermalize	qed.c	/^int g_thermalize = 500;      \/\/Number of MC updates for thermalization$/;"	v
+g_thermalize	test1.c	/^int g_thermalize = 2;      \/\/Number of MC updates for thermalization$/;"	v
+g_thermalize	test2.c	/^int g_thermalize = 2;      \/\/Number of MC updates for thermalization$/;"	v
+gam5D_SQR_musqr_wilson	dirac.c	/^void gam5D_SQR_musqr_wilson(spinor *out, spinor *temp, spinor *in) {$/;"	f
+gam5D_SQR_wilson	dirac.c	/^void gam5D_SQR_wilson(spinor *out, spinor *temp, spinor *in) {$/;"	f
+gam5D_wilson	dirac.c	/^void gam5D_wilson(spinor *out, spinor *in) {$/;"	f
+gamma5	linalg.c	/^void gamma5(spinor *out, spinor *in)$/;"	f
+gamma5_i	linalg.c	/^spinor gamma5_i(spinor s)$/;"	f
+gauge1	fields.c	/^double gauge1[GRIDPOINTS], gauge2[GRIDPOINTS], gauge1_old[GRIDPOINTS], gauge2_old[GRIDPOINTS];$/;"	v
+gauge1_old	fields.c	/^double gauge1[GRIDPOINTS], gauge2[GRIDPOINTS], gauge1_old[GRIDPOINTS], gauge2_old[GRIDPOINTS];$/;"	v
+gauge2	fields.c	/^double gauge1[GRIDPOINTS], gauge2[GRIDPOINTS], gauge1_old[GRIDPOINTS], gauge2_old[GRIDPOINTS];$/;"	v
+gauge2_old	fields.c	/^double gauge1[GRIDPOINTS], gauge2[GRIDPOINTS], gauge1_old[GRIDPOINTS], gauge2_old[GRIDPOINTS];$/;"	v
+gauge_force	2MN_integrator.c	/^double gauge_force = 0;$/;"	v
+gauss	rand/gauss.c	/^double gauss()$/;"	f
+gp1	fields.c	/^double gp1[GRIDPOINTS], gp2[GRIDPOINTS];$/;"	v
+gp2	fields.c	/^double gp1[GRIDPOINTS], gp2[GRIDPOINTS];$/;"	v
+ham	qed.c	/^double ham = 0, ham_old = 0;$/;"	v
+ham_old	qed.c	/^double ham = 0, ham_old = 0;$/;"	v
+hamiltonian	test2.c	/^double hamiltonian()$/;"	f
+hotstart	fields.c	/^void hotstart()$/;"	f
+idx	lattice.c	/^int idx(const int x1, const int x2, const int NX) {$/;"	f
+init	rand/ranlxd.c	/^static int init=0,pr,prm,ir,jr,is,is_old,next[96];$/;"	v	file:
+init	rand/ranlxs.c	/^static int init=0,pr,prm,ir,jr,is,is_old,next[96];$/;"	v	file:
+init_lattice	lattice.c	/^int init_lattice(const int NX, const int NY) {$/;"	f
+integrate_leap_frog	rec_lf_integrator.c	/^void integrate_leap_frog(const double tau, const int S, const int no_timescales, $/;"	f
+ir	rand/ranlxd.c	/^static int init=0,pr,prm,ir,jr,is,is_old,next[96];$/;"	v	file:
+ir	rand/ranlxs.c	/^static int init=0,pr,prm,ir,jr,is,is_old,next[96];$/;"	v	file:
+is	rand/ranlxd.c	/^static int init=0,pr,prm,ir,jr,is,is_old,next[96];$/;"	v	file:
+is	rand/ranlxs.c	/^static int init=0,pr,prm,ir,jr,is,is_old,next[96];$/;"	v	file:
+is_old	rand/ranlxd.c	/^static int init=0,pr,prm,ir,jr,is,is_old,next[96];$/;"	v	file:
+is_old	rand/ranlxs.c	/^static int init=0,pr,prm,ir,jr,is,is_old,next[96];$/;"	v	file:
+jr	rand/ranlxd.c	/^static int init=0,pr,prm,ir,jr,is,is_old,next[96];$/;"	v	file:
+jr	rand/ranlxs.c	/^static int init=0,pr,prm,ir,jr,is,is_old,next[96];$/;"	v	file:
+leapfrog	leapfrog.c	/^void leapfrog(const int nsteps, const double dtau) {$/;"	f
+left1	lattice.c	/^int * left1;$/;"	v
+left2	lattice.c	/^int * left2;$/;"	v
+link1	fields.c	/^complex double link1[GRIDPOINTS], link2[GRIDPOINTS];$/;"	v
+link2	fields.c	/^complex double link1[GRIDPOINTS], link2[GRIDPOINTS];$/;"	v
+load_gauge	qed.c	/^void load_gauge(const char *filename)$/;"	f
+main	ctest.c	/^int main(int argc, char *argv[])$/;"	f
+main	qed.c	/^int main(int argc, char **argv) $/;"	f
+main	rand/testlx.c	/^int main(void)$/;"	f
+main	test1.c	/^int main(int argc, char **argv) $/;"	f
+main	test2.c	/^int main(int argc, char **argv) $/;"	f
+matrix_mult	linalg.h	/^typedef void (*matrix_mult) (spinor * const, spinor * const, spinor * const);$/;"	t
+mean	statistics.h	/^  double sum, square_sum, mean, error;$/;"	m	struct:statistics_data
+mean_plaquette	measurements.c	/^double mean_plaquette()$/;"	f
+mul_c	linalg.c	/^void mul_c(spinor *R, complex double c, spinor *S)$/;"	f
+mul_r	linalg.c	/^void mul_r(spinor *R, double c, spinor *S)$/;"	f
+n_steps	qed.c	/^int n_steps[3];$/;"	v
+next	rand/ranlxd.c	/^static int init=0,pr,prm,ir,jr,is,is_old,next[96];$/;"	v	file:
+next	rand/ranlxs.c	/^static int init=0,pr,prm,ir,jr,is,is_old,next[96];$/;"	v	file:
+no_timescales	qed.c	/^int no_timescales = 1;$/;"	v
+num	rand/ranlxd.c	/^   float num[96];$/;"	m	union:__anon3	file:
+num	rand/ranlxd.c	/^   int num[96];$/;"	m	union:__anon6	file:
+num	rand/ranlxs.c	/^   float num[96];$/;"	m	union:__anon9	file:
+num	rand/ranlxs.c	/^   int num[96];$/;"	m	union:__anon12	file:
+one	rand/ranlxd.c	/^static vec_t one,one_bit,carry;$/;"	v	file:
+one	rand/ranlxs.c	/^static vec_t one,one_bit,carry;$/;"	v	file:
+one_bit	rand/ranlxd.c	/^static double one_bit;$/;"	v	file:
+one_bit	rand/ranlxd.c	/^static vec_t one,one_bit,carry;$/;"	v	file:
+one_bit	rand/ranlxs.c	/^static float one_bit;$/;"	v	file:
+one_bit	rand/ranlxs.c	/^static vec_t one,one_bit,carry;$/;"	v	file:
+pcac_correlation_function	measurements.c	/^double pcac_correlation_function(int t)$/;"	f
+pion_correlation_function	measurements.c	/^double pion_correlation_function(int t)$/;"	f
+polyakov_loop	measurements.c	/^double polyakov_loop()$/;"	f
+pr	rand/ranlxd.c	/^static int init=0,pr,prm,ir,jr,is,is_old,next[96];$/;"	v	file:
+pr	rand/ranlxs.c	/^static int init=0,pr,prm,ir,jr,is,is_old,next[96];$/;"	v	file:
+print_statistics_array	statistics.c	/^void print_statistics_array(statistics_data *data, const char *name, int array_size, double factor)$/;"	f
+print_statistics_data	statistics.c	/^void print_statistics_data(statistics_data *data, const char *name, double factor)$/;"	f
+prm	rand/ranlxd.c	/^static int init=0,pr,prm,ir,jr,is,is_old,next[96];$/;"	v	file:
+prm	rand/ranlxs.c	/^static int init=0,pr,prm,ir,jr,is,is_old,next[96];$/;"	v	file:
+qed_statistics_h	statistics.h	10;"	d
+rand_spinor	test1.c	/^void rand_spinor(spinor *P)$/;"	f
+rand_spinor	test2.c	/^void rand_spinor(spinor *P)$/;"	f
+ranlxd	rand/ranlxd.c	/^void ranlxd(double r[],int n)$/;"	f
+ranlxs	rand/ranlxs.c	/^void ranlxs(float r[],int n)$/;"	f
+reset_statistics_data	statistics.c	/^void reset_statistics_data(statistics_data *data)$/;"	f
+right1	lattice.c	/^int * right1;$/;"	v
+right2	lattice.c	/^int * right2;$/;"	v
+rlxd_get	rand/ranlxd.c	/^void rlxd_get(int state[])$/;"	f
+rlxd_init	rand/ranlxd.c	/^void rlxd_init(int level,int seed)$/;"	f
+rlxd_reset	rand/ranlxd.c	/^void rlxd_reset(int state[])$/;"	f
+rlxd_size	rand/ranlxd.c	/^int rlxd_size(void)$/;"	f
+rlxs_get	rand/ranlxs.c	/^void rlxs_get(int state[])$/;"	f
+rlxs_init	rand/ranlxs.c	/^void rlxs_init(int level,int seed)$/;"	f
+rlxs_reset	rand/ranlxs.c	/^void rlxs_reset(int state[])$/;"	f
+rlxs_size	rand/ranlxs.c	/^int rlxs_size(void)$/;"	f
+s1	linalg.h	/^ complex double s1, s2;$/;"	m	struct:spinor
+s2	linalg.h	/^ complex double s1, s2;$/;"	m	struct:spinor
+s_g	fields.c	/^double s_g, s_g_old;$/;"	v
+s_g_old	fields.c	/^double s_g, s_g_old;$/;"	v
+save_gauge	qed.c	/^void save_gauge(const char *filename)$/;"	f
+scalar_prod	linalg.c	/^complex double scalar_prod(spinor *S, spinor *R)$/;"	f
+scalar_prod_r	linalg.c	/^double scalar_prod_r(spinor *S, spinor *R)$/;"	f
+set_zero	linalg.c	/^void set_zero(spinor *P)$/;"	f
+spinor	linalg.h	/^typedef struct spinor {$/;"	s
+spinor	linalg.h	/^} spinor;$/;"	t	typeref:struct:spinor
+square_norm	linalg.c	/^double square_norm(spinor *S)$/;"	f
+square_sum	statistics.h	/^  double sum, square_sum, mean, error;$/;"	m	struct:statistics_data
+statistics_data	statistics.h	/^typedef struct statistics_data {$/;"	s
+statistics_data	statistics.h	/^} statistics_data;$/;"	t	typeref:struct:statistics_data
+sum	statistics.h	/^  double sum, square_sum, mean, error;$/;"	m	struct:statistics_data
+tau	qed.c	/^double tau = 1.;$/;"	v
+thermalize_min_acc	qed.c	/^double thermalize_min_acc = 0.7; \/\/ minimum ratio of accepted thermalization steps$/;"	v
+topological_charge	measurements.c	/^double topological_charge()$/;"	f
+trX_dQ_wilson_dalpha1_X	dirac.c	/^double trX_dQ_wilson_dalpha1_X(int j)$/;"	f
+trX_dQ_wilson_dalpha2_X	dirac.c	/^double trX_dQ_wilson_dalpha2_X(int j)$/;"	f
+up_m	rec_lf_integrator.h	/^typedef void (*up_m) (const double);$/;"	t
+up_momenta	qed.c	/^up_m up_momenta[3];$/;"	v
+update	hmc.c	/^int update() \/\/Basic HMC update step$/;"	f
+update	rand/ranlxd.c	/^static void update()$/;"	f	file:
+update	rand/ranlxs.c	/^static void update()$/;"	f	file:
+update_gauge	leapfrog.c	/^void update_gauge(const double dtau) {$/;"	f
+update_momenta	leapfrog.c	/^void update_momenta(const double dtau) $/;"	f
+update_momenta_PF1	2MN_integrator.c	/^void update_momenta_PF1(const double dtau) {$/;"	f
+update_momenta_PF2	2MN_integrator.c	/^void update_momenta_PF2(const double dtau) {$/;"	f
+update_momenta_fermion	2MN_integrator.c	/^void update_momenta_fermion(const double dtau) {$/;"	f
+update_momenta_gauge	2MN_integrator.c	/^void update_momenta_gauge(const double dtau) {$/;"	f
+vec	rand/ranlxd.c	/^   dble_vec_t vec[12];$/;"	m	union:__anon3	file:
+vec	rand/ranlxd.c	/^   dble_vec_t vec[12];$/;"	m	union:__anon6	file:
+vec	rand/ranlxs.c	/^   dble_vec_t vec[12];$/;"	m	union:__anon12	file:
+vec	rand/ranlxs.c	/^   dble_vec_t vec[12];$/;"	m	union:__anon9	file:
+vec_t	rand/ranlxd.c	/^} vec_t __attribute__ ((aligned (16)));$/;"	t	typeref:struct:__anon1	file:
+vec_t	rand/ranlxd.c	/^} vec_t;$/;"	t	typeref:struct:__anon4	file:
+vec_t	rand/ranlxs.c	/^} vec_t __attribute__ ((aligned (16)));$/;"	t	typeref:struct:__anon7	file:
+vec_t	rand/ranlxs.c	/^} vec_t;$/;"	t	typeref:struct:__anon10	file:
+x	rand/ranlxd.c	/^} x __attribute__ ((aligned (16)));$/;"	v	typeref:union:__anon3	file:
+x	rand/ranlxd.c	/^} x;$/;"	v	typeref:union:__anon6	file:
+x	rand/ranlxs.c	/^} x __attribute__ ((aligned (16)));$/;"	v	typeref:union:__anon9	file:
+x	rand/ranlxs.c	/^} x;$/;"	v	typeref:union:__anon12	file:
