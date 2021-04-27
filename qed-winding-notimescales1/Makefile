@@ -1,4 +1,4 @@
-CC = gcc -std=c99 -Werror -Wall -O3
+CC = gcc -std=c99 -Wall -O3
 
 all: qed
 

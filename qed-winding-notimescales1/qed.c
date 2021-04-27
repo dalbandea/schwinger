@@ -36,7 +36,7 @@ void load_gauge(const char *filename);
 int n_steps[3];
 /* list of function pointers to the momentum update functions */
 up_m up_momenta[3];
-int no_timescales = 3;
+int no_timescales = 1;
 double tau = 1.;
 
 int main(int argc, char **argv) 

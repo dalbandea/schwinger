@@ -35,6 +35,9 @@
 #include "leapfrog2.h"
 #include "rec_lf_integrator.h"
 #include "hmc.h"
+#ifndef M_PI
+# define M_PI    3.14159265358979323846f
+#endif
 
 
 int R;
@@ -71,23 +74,10 @@ int update() //Basic HMC update step
   
   // step iv): g_fermion = \phi = K^dag * g_X = K^dag * \xi
   gam5D_wilson(g_fermion, g_X);
-  assign_diff_mul(g_fermion, g_X, 0.+I*sqrt(g_musqr));
+  /* assign_diff_mul(g_fermion, g_X, 0.+I*sqrt(g_musqr)); */
   ham_old += squnrm;
 
   /* PF2 det((Q^2 + mu^2)/Q^2) */
-  if(no_timescales > 2) {
-    for(i=0; i<GRIDPOINTS; i++) {
-      g_X[i].s1 = (gauss() + I*gauss())/sqrt(2); //Gaussian fields R
-      g_X[i].s2 = (gauss() + I*gauss())/sqrt(2);
-    }
-    squnrm = square_norm(g_X);
-
-    cg(g_fermion2, g_X, ITER_MAX, DELTACG, &gam5D_SQR_musqr_wilson);    
-    gam5D_wilson(g_gam5DX, g_fermion2);
-    assign_add_mul(g_gam5DX, g_fermion2, 0.+I*sqrt(g_musqr));
-    gam5D_wilson(g_fermion2, g_gam5DX);
-    ham_old += squnrm;
-  }
   // Add the part for the fermion fields
 
   // Do the molecular dynamic chain
@@ -98,10 +88,8 @@ int update() //Basic HMC update step
 
   /* This is the recursive implementation */
   /* in can be found in rec_lf_integrator.c|h */
-  if (no_timescales == 1)
-    leapfrog(n_steps[0], tau/n_steps[0]);
-  else
-    integrate_leap_frog(tau/n_steps[no_timescales-1], no_timescales-1, no_timescales, n_steps, 1, up_momenta);
+  n_steps[0] = 100;
+  leapfrog(n_steps[0], tau/n_steps[0]);
   
   // Calculate the new action and hamiltonian
   ham = 0;
@@ -116,11 +104,6 @@ int update() //Basic HMC update step
   cg(g_X, g_fermion, ITER_MAX, DELTACG, &gam5D_SQR_musqr_wilson);
   ham += scalar_prod_r(g_fermion, g_X);
   
-  if(no_timescales > 2) {
-    cg(g_gam5DX, g_fermion2, ITER_MAX, DELTACG, &gam5D_SQR_wilson);
-    gam5D_SQR_musqr_wilson(g_X, g_temp, g_gam5DX);
-    ham += scalar_prod_r(g_fermion2, g_X);
-  }
 
   exphdiff = exp(ham_old-ham);
   acc = accept(exphdiff);
@@ -164,6 +147,83 @@ int accept(const double exphdiff)
   return acc;
 }
 
+void add_windingN(int n){
+  double r[2];
+  ranlxd(r, 2);
+  int pos = (int) X1*X2*r[0]; 
+  int sign = 1;
+  if(r[1]>0.5) sign = -1;
+  int i,j;
+  int x2  = pos/X1;
+  int x1  = pos%X2;
+
+  double phase[n+1][n+1];
+
+  /* for(i=0;i<n+2;i++) for(j=0;j<n+2;j++) { */
+  /*     pos = idx((i+x1-1+X1)%X1,(j+x2-1+X2)%X2,X1); */
+  /*     //   printf("plaq i j = %d %d, %f \n ",i,j, (gauge1[pos] + gauge2[right1[pos]] - gauge1[right2[pos]] - gauge2[pos]  )); */
+      
+  /*   } */
+  
+
+  for(i=0;i<n+1;i++) for(j=0;j<n+1;j++) {
+      phase[i][j] = 0;
+    }
+
+
+  for(i=0;i<n+1;i++) {
+    phase[0][i] = i*M_PI/(2*n);
+    phase[n][i] = 3*M_PI/2 - i*M_PI/(2*n);
+    phase[i][0] = 2*M_PI - i*M_PI/(2*n);
+    phase[i][n] = M_PI/2 + i*M_PI/(2*n);
+  }
+  phase[0][0] = 2*M_PI;
+
+  int zero =0;
+  
+  for(i=0;i<n;i++) for(j=0;j<n;j++) {
+      zero = 0;
+      pos = idx((i+x1)%X1,(j+x2)%X2,X1);
+      
+      if(i==0&&j==0) zero=1.;
+
+      if(j+1<n+1) gauge2[pos] += sign*(phase[i][j+1]-phase[i][j] - zero*2*M_PI);
+      if(i+1<n+1) gauge1[pos] += sign*(phase[i+1][j]-phase[i][j]);
+    }
+  
+  for(j=0;j<n;j++) {
+    pos = idx((n+x1)%X1,(j+x2)%X2,X1);
+    gauge2[pos] += sign*(phase[n][j+1]-phase[n][j]) ;
+  }
+  for(j=0;j<n;j++) {
+    pos = idx((j+x1)%X1,(n+x2)%X2,X1);
+    gauge1[pos] += sign*(phase[j+1][n]-phase[j][n]);
+  }
+  
+  for(i=0;i<n+2;i++) for(j=0;j<n+2;j++) {
+      pos = idx((i+x1-1+X1)%X1,(j+x2-1+X2)%X2,X1);
+      //      printf("plaq i j = %d %d, %f \n ",i,j, (gauge1[pos] + gauge2[right1[pos]] - gauge1[right2[pos]] - gauge2[pos]  ));
+           
+    }
+
+
+
+  /*
+    for(i=0;i<6;i++){
+      pos = idx((i+x1)%X1,(X2-1+x2)%X2,X1);      
+      gauge2[pos] += sign*(phase[i][0]);
+      pos = idx((i+x1)%X1,(X2+5+x2)%X2,X1);      
+      gauge2[pos] += sign*(-phase[i][5]);
+      pos = idx((X1-1+x1)%X1,(i+x2)%X2,X1);
+      gauge1[pos] += sign*(phase[0][i]);
+      pos = idx((X1+5+x1)%X1,(i+x2)%X2,X1);
+      gauge1[pos] += sign*(-phase[5][i]);
+      
+    }
+  */
+  calculatelinkvars();
+
+}
 
 
 
