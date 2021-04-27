@@ -10,6 +10,7 @@ void add(spinor *Q, spinor *R, spinor *S)
   int ix;
   spinor *q,*r,*s;
   
+#pragma omp parallel for shared(S, R, Q) private(s, r, q)
   for (ix=0;ix<GRIDPOINTS;ix++)
   {
     q = (spinor *) Q + ix;
@@ -29,6 +30,7 @@ double square_norm(spinor *S)
 
   ds=0.0;
 
+#pragma omp parallel for shared(S) private(s) reduction(+: ds)
   for (ix=0;ix<GRIDPOINTS;ix++)
   {
     s=(spinor *)S + ix;
@@ -43,6 +45,7 @@ void assign(spinor *R, spinor *S)
   int ix;
   spinor *r,*s;
   
+#pragma omp parallel for shared(S, R) private(s, r)
   for (ix=0;ix<GRIDPOINTS;ix++){
     r=(spinor *) R + ix;
     s=(spinor *) S + ix;
@@ -59,6 +62,7 @@ void assign_add_mul(spinor *P, spinor *Q, complex double c)
   spinor *r,*s;
 
   
+#pragma omp parallel for shared(P, Q, c)
   for (ix=0;ix<GRIDPOINTS;ix++){
     r=(spinor *) P + ix;
     s=(spinor *) Q + ix;
@@ -75,6 +79,7 @@ void assign_add_mul_r(spinor *P, spinor *Q, double c)
 
   fact=c;
    
+#pragma omp parallel for shared(P, Q, fact)
   for (ix=0;ix<GRIDPOINTS;ix++){
 
     P[ix].s1+=fact*Q[ix].s1;
@@ -86,6 +91,7 @@ void assign_diff_mul(spinor *R, spinor *S, complex double c){
   int ix;
   spinor *r, *s;
 
+#pragma omp parallel for shared(R, S, c) private(r,s)
   for (ix=0;ix<GRIDPOINTS;ix++)
   {
     s = (spinor *) S + ix;
@@ -104,6 +110,7 @@ void assign_mul_add_r(spinor *R, spinor *S, double c)
   
   fact=c;
   
+#pragma omp parallel for shared(R, S, c) private(r,s)
   for (ix=0;ix<GRIDPOINTS;ix++){
     r=(spinor *) R + ix;
     s=(spinor *) S + ix;
@@ -118,6 +125,7 @@ void diff(spinor *Q, spinor *R, spinor *S)
   int ix;
   spinor *q,*r,*s;
   
+#pragma omp parallel for shared(R, S, Q) private(r,s,q)
   for (ix=0;ix<GRIDPOINTS;ix++){
     q=(spinor *) Q + ix;
     r=(spinor *) R + ix;
@@ -133,6 +141,7 @@ void mul_r(spinor *R, double c, spinor *S)
   int ix;
   spinor *r,*s;
 
+#pragma omp parallel for shared(R, S, c) private(r,s)
   for (ix=0;ix<GRIDPOINTS;ix++){
     r=(spinor *) R + ix;
     s=(spinor *) S + ix;
@@ -147,6 +156,7 @@ void mul_c(spinor *R, complex double c, spinor *S)
   int ix;
   spinor *r,*s;
 
+#pragma omp parallel for shared(R, S, c) private(r,s)
   for (ix=0;ix<GRIDPOINTS;ix++){
     r=(spinor *) R + ix;
     s=(spinor *) S + ix;
@@ -166,6 +176,7 @@ complex double scalar_prod(spinor *S, spinor *R)
 
   ds=0.0 + I*0.0;
   
+#pragma omp parallel for shared(S,R) private(s,r) reduction(+: ds)
   for (ix=0;ix<GRIDPOINTS;ix++){
     s=(spinor *) S + ix;
     r=(spinor *) R + ix;
@@ -186,6 +197,7 @@ double scalar_prod_r(spinor *S, spinor *R)
 
   ds=0.0;
   
+#pragma omp parallel for shared(S,R) private(s,r) reduction(+: ds)
   for (ix=0;ix<GRIDPOINTS;ix++){
     s=(spinor *) S + ix;
     r=(spinor *) R + ix;
@@ -269,6 +281,7 @@ spinor gamma5_i(spinor s)
 void gamma5(spinor *out, spinor *in)
 {
  int i;
+#pragma omp parallel for shared(out, in)
  for(i=0; i<GRIDPOINTS; i++)
  {
   out[i]=gamma5_i(in[i]);
@@ -278,6 +291,7 @@ void gamma5(spinor *out, spinor *in)
 void set_zero(spinor *P)
 {
  int i;
+#pragma omp parallel for shared(P)
  for(i=0; i<GRIDPOINTS; i++)
  {
   P[i].s1 = 0.0 + I*0.0;

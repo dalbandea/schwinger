@@ -5,6 +5,7 @@
 #include <getopt.h>
 #include <string.h>
 #include <unistd.h>
+#include <omp.h>
 
 #include "statistics.h"
 #include "lattice.h"
@@ -36,7 +37,7 @@ void load_gauge(const char *filename);
 int n_steps[3];
 /* list of function pointers to the momentum update functions */
 up_m up_momenta[3];
-int no_timescales = 3;
+int no_timescales = 1;
 double tau = 1.;
 
 int main(int argc, char **argv) 
@@ -47,6 +48,11 @@ int main(int argc, char **argv)
   n_steps[1] = 0;
   n_steps[2] = 0;
   
+#pragma omp parallel
+  {
+	 printf("Hello from process: %d\n", omp_get_thread_num());
+  }
+
   struct option long_options[] =
   {
     /* These options set a flag. */
@@ -164,10 +170,17 @@ int main(int argc, char **argv)
   {
     for(i=0; i<g_thermalize; i++)
     {
+	    double start;
+	    double end;
+	    start = omp_get_wtime();
+
       accepted += update();
       printf("\t Step %04i,\t mp = %2.4lf,\t pl = %2.4lf,\t cc = %2.4lf\t dh = %2.4lf,\tcg1 = %d,\tcg2 = %d\n", i, mean_plaquette(), polyakov_loop(), chiral_condensate(), ham-ham_old, g_cgiterations1, g_cgiterations2);
       g_cgiterations1 = 0;
       g_cgiterations2 = 0;
+
+	    end = omp_get_wtime();
+	    printf("Work took %f seconds\n", end - start);
     }
     if (accepted < g_thermalize * thermalize_min_acc)
     {

@@ -52,6 +52,8 @@ int update() //Basic HMC update step
   /* g_X is ab-used a bit - here it is \xi = (gamma5 D)^{-1} \phi */
   
   ham_old = s_g_old;
+
+#pragma parallel for shared(gp1, gp2) reduction(+: ham_old)
   for(i=0; i<GRIDPOINTS; i++) {
     gp1[i] = gauss();
     gp2[i] = gauss();
@@ -63,6 +65,8 @@ int update() //Basic HMC update step
   /*   S = R^dagger * R  =  g_fermion^dag * D^{-1 dag} * D^{-1} * g_fermion = g_fermion Q^-1 g_fermion */
 
   /* PF1 det(1/(Q^2 + mu^2)) */
+
+#pragma parallel for shared(g_X) 
   for(i=0; i<GRIDPOINTS; i++) {
     g_X[i].s1 = (gauss() + I*gauss())/sqrt(2); //Gaussian fields R
     g_X[i].s2 = (gauss() + I*gauss())/sqrt(2);
@@ -71,7 +75,7 @@ int update() //Basic HMC update step
   
   // step iv): g_fermion = \phi = K^dag * g_X = K^dag * \xi
   gam5D_wilson(g_fermion, g_X);
-  assign_diff_mul(g_fermion, g_X, 0.+I*sqrt(g_musqr));
+  /* assign_diff_mul(g_fermion, g_X, 0.+I*sqrt(g_musqr)); */
   ham_old += squnrm;
 
   /* PF2 det((Q^2 + mu^2)/Q^2) */
@@ -98,14 +102,17 @@ int update() //Basic HMC update step
 
   /* This is the recursive implementation */
   /* in can be found in rec_lf_integrator.c|h */
-  if (no_timescales == 1)
+  if (no_timescales == 1){
+	  n_steps[0] = 100;
     leapfrog(n_steps[0], tau/n_steps[0]);
-  else
+  }else
     integrate_leap_frog(tau/n_steps[no_timescales-1], no_timescales-1, no_timescales, n_steps, 1, up_momenta);
   
   // Calculate the new action and hamiltonian
   ham = 0;
   s_g = 0;
+
+#pragma parallel for shared(gp1, gp2) reduction(+: s_g, ham)
   for (i=0; i<GRIDPOINTS; i++) {
     s_g += S_G(i);
     ham += 0.5*(gp1[i]*gp1[i] + gp2[i]*gp2[i]);
@@ -125,6 +132,7 @@ int update() //Basic HMC update step
   exphdiff = exp(ham_old-ham);
   acc = accept(exphdiff);
  
+#pragma parallel for shared(gauge1_old, gauge2_old, gauge1, gauge2)
   for(i=0; i<GRIDPOINTS; i++) {
     gauge1_old[i]=gauge1[i];
     gauge2_old[i]=gauge2[i];

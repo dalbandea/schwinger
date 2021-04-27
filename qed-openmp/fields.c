@@ -73,6 +73,8 @@ void hotstart()
 int calculatelinkvars()
 {
  int i;
+
+#pragma parallel for shared(link1, link2, gauge1, gauge2)
  for(i=0; i<GRIDPOINTS; i++)
  {
   link1[i] = cos(gauge1[i]) + I*sin(gauge1[i]);
