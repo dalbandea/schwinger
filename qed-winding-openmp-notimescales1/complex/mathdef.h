@@ -26,10 +26,10 @@
 /* The ix87 FPUs evaluate all values in the 80 bit floating-point format
    which is also available for the user as `long double'.  Therefore we
    define:  */
-/* typedef long double float_t;	/1* `float' expressions are evaluated as */
-/* 				   `long double'.  *1/ */
-/* typedef long double double_t;	/1* `double' expressions are evaluated as */
-/* 				   `long double'.  *1/ */
+typedef long double float_t;	/* `float' expressions are evaluated as
+				   `long double'.  */
+typedef long double double_t;	/* `double' expressions are evaluated as
+				   `long double'.  */
 
 /* Define `INFINITY' as value of type `float'.  */
 # define INFINITY	HUGE_VALF

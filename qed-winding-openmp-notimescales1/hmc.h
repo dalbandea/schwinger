@@ -29,5 +29,6 @@ extern int g_cgiterations1, g_cgiterations2;
 
 int  update(); //Basic HMC update step
 int  accept(const double exphdiff); //Accept or reject the trajectory depending on exphdiff
+void add_windingN(int n); // Do winding of size n
 
 #endif
