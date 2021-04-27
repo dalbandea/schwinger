@@ -78,20 +78,6 @@ int update() //Basic HMC update step
   /* assign_diff_mul(g_fermion, g_X, 0.+I*sqrt(g_musqr)); */
   ham_old += squnrm;
 
-  /* PF2 det((Q^2 + mu^2)/Q^2) */
-  if(no_timescales > 2) {
-    for(i=0; i<GRIDPOINTS; i++) {
-      g_X[i].s1 = (gauss() + I*gauss())/sqrt(2); //Gaussian fields R
-      g_X[i].s2 = (gauss() + I*gauss())/sqrt(2);
-    }
-    squnrm = square_norm(g_X);
-
-    cg(g_fermion2, g_X, ITER_MAX, DELTACG, &gam5D_SQR_musqr_wilson);    
-    gam5D_wilson(g_gam5DX, g_fermion2);
-    assign_add_mul(g_gam5DX, g_fermion2, 0.+I*sqrt(g_musqr));
-    gam5D_wilson(g_fermion2, g_gam5DX);
-    ham_old += squnrm;
-  }
   // Add the part for the fermion fields
 
   // Do the molecular dynamic chain
@@ -102,11 +88,8 @@ int update() //Basic HMC update step
 
   /* This is the recursive implementation */
   /* in can be found in rec_lf_integrator.c|h */
-  if (no_timescales == 1){
-	  n_steps[0] = 100;
-    leapfrog(n_steps[0], tau/n_steps[0]);
-  }else
-    integrate_leap_frog(tau/n_steps[no_timescales-1], no_timescales-1, no_timescales, n_steps, 1, up_momenta);
+  n_steps[0] = 100;
+  leapfrog(n_steps[0], tau/n_steps[0]);
   
   // Calculate the new action and hamiltonian
   ham = 0;
@@ -123,12 +106,6 @@ int update() //Basic HMC update step
   cg(g_X, g_fermion, ITER_MAX, DELTACG, &gam5D_SQR_musqr_wilson);
   ham += scalar_prod_r(g_fermion, g_X);
   
-  if(no_timescales > 2) {
-    cg(g_gam5DX, g_fermion2, ITER_MAX, DELTACG, &gam5D_SQR_wilson);
-    gam5D_SQR_musqr_wilson(g_X, g_temp, g_gam5DX);
-    ham += scalar_prod_r(g_fermion2, g_X);
-  }
-
   exphdiff = exp(ham_old-ham);
   acc = accept(exphdiff);
  
