@@ -141,24 +141,34 @@ int main(int argc, char **argv)
   }
   
   int i, l;
+  time_t now = time(0);
   int accepted = 0;        //Total number of accepted configurations
   int total_updates = 0;   //Total number of updates
   /* Containers for the mean plaquette, Polyakov loop and chiral condensate */
   /* and corresponding errors etc. */
   double total_cgiterations1 = 0, total_cgiterations2 = 0;
   /* Initialize the random number generator */
-  rlxd_init(2, 123456); 
+  rlxd_init(2, now); 
+  /* rlxd_init(2, 123456); */ 
   /* Initialize the lattice geometry */
   init_lattice(X1, X2);
   /* Initialize the fields */
   coldstart();
+  /* hotstart(); */
   /* Print out the run parameters */
   echo_sim_params(); 
+
+  printf("\t Seed:			      %i\n",	  now);
+
   
   /* thermalization */
   printf("\n Thermalization: \n\n");
   char dump_filename[1000];
   sprintf(dump_filename, "dumps/beta=%lf mass=%lf X1=%i X2=%i.dmp", beta, g_mass, X1, X2);
+
+  FILE *file_correlations;
+  file_correlations = fopen("pion_correlation_function.txt", "w");
+  fprintf(file_correlations, "\n Thermalization: \n\n");
   
   if (access(dump_filename, F_OK) != -1)
   {
@@ -174,13 +184,21 @@ int main(int argc, char **argv)
 	    double end;
 	    start = omp_get_wtime();
 
-      accepted += update();
-      printf("\t Step %04i,\t mp = %2.4lf,\t pl = %2.4lf,\t cc = %2.4lf\t dh = %2.4lf,\tcg1 = %d,\tcg2 = %d\n", i, mean_plaquette(), polyakov_loop(), chiral_condensate(), ham-ham_old, g_cgiterations1, g_cgiterations2);
+      int accepted_cur = 0;
+      accepted_cur += update(i, file_correlations);
+      accepted += accepted_cur;
+      printf("\t Step %04i,\t mp = %2.4lf,\t pl = %2.4lf,\t cc = %2.4lf\t dh = %2.4lf,\tcg1 = %d,\tcg2 = %d,\t acc = %i,\t acctc = %lf\n", i, mean_plaquette(), polyakov_loop(), chiral_condensate(), ham-ham_old, g_cgiterations1, g_cgiterations2, accepted_cur, accepted/((float) i+1.0));
       g_cgiterations1 = 0;
       g_cgiterations2 = 0;
 
 	    end = omp_get_wtime();
 	    printf("Work took %f seconds\n", end - start);
+
+	    if( i%10000 == 0 ){
+		    char run_file[100];
+		    sprintf(run_file, "Thconfig.%i.%i.b%.1lf.%i",X1,X2,beta,i);
+		    save_gauge(run_file);
+	    }
     }
     if (accepted < g_thermalize * thermalize_min_acc)
     {
@@ -193,12 +211,18 @@ int main(int argc, char **argv)
   
   // re-initialize the random number generator,
   // because the thermalization may have been omitted
-  rlxd_init(2, 123456);
+  /* rlxd_init(2, 123456); */
   
   /* measure the iterations only during real simulation, not thermalization */
   R = 0;               //Total number of rejected configurations
   
   printf("\n Generation: \n\n");
+
+  FILE *file;
+  file = fopen("output.txt", "w");
+
+  fprintf(file_correlations, "\n Generation: \n\n");
+
   
   statistics_data gauge_force_statistics; reset_statistics_data(&gauge_force_statistics);
   statistics_data PF1_force_statistics; reset_statistics_data(&PF1_force_statistics);
@@ -235,8 +259,8 @@ int main(int argc, char **argv)
     /* do g_intermediate updates before measurement */
     int accepted_cur = 0;
     for (l=0; l<g_intermediate; l++)
-      accepted_cur += update();
-    accepted_cur += update();
+      accepted_cur += update(i, file_correlations);
+    accepted_cur += update(i, file_correlations);
     accepted += accepted_cur;
     /* Measurements */
     double mp  = mean_plaquette();
@@ -256,6 +280,10 @@ int main(int argc, char **argv)
     double C_X2_3_8 = 0;
     double C_X2_5_8 = 0;
     int tc_index = lround(tc);
+
+
+    if(i%100 == 0) fprintf(file_correlations, "\t Step %04i", i);
+
     for (int t = 0; t < X2; t ++)
     {
       double pion_correlation = pion_correlation_function(t);
@@ -272,7 +300,12 @@ int main(int argc, char **argv)
         C_X2_3_8 = pion_correlation;
       if (t == (X2 * 5) / 8)
         C_X2_5_8 = pion_correlation;
+
+    if(i%100 == 0) fprintf(file_correlations, "\t %2.15lf", pion_correlation );
     }
+
+    if(i%100 == 0) fprintf(file_correlations, "\n" );
+
     
     add_statistics_entry(&mp_statistics, mp);
     add_statistics_entry(&pl_statistics, pl);
@@ -287,8 +320,17 @@ int main(int argc, char **argv)
     total_cgiterations1 += g_cgiterations1;
     total_cgiterations2 += g_cgiterations2;
     
-    printf("\t Step %04i,\t mp = %2.8lf,\t pl = %2.4lf,\t cc = %2.4lf,\t tc = %2.1lf,\t C(%i) = %2.10lf,\t C(%i) = %2.10lf,\t C(%i) = %2.10lf,\t dh = %2.8lf,\t cg1 = %d,\t cg2 = %d,\t acc = %d\n", i, mp, pl, cc, tc, (X2 * 3) / 8, C_X2_3_8, X2 / 2, C_X2_2, (X2 * 5) / 8, C_X2_5_8, -dh, g_cgiterations1, g_cgiterations2, accepted_cur);
+    if(i%100 == 0) printf("\t Step %04i,\t mp = %2.8lf,\t pl = %2.4lf,\t cc = %2.4lf,\t tc = %2.1lf,\t C(%i) = %2.10lf,\t C(%i) = %2.10lf,\t C(%i) = %2.10lf,\t dh = %2.8lf,\t cg1 = %d,\t cg2 = %d,\t acc = %d, acctc = %.8f\n", i, mp, pl, cc, tc, (X2 * 3) / 8, C_X2_3_8, X2 / 2, C_X2_2, (X2 * 5) / 8, C_X2_5_8, -dh, g_cgiterations1, g_cgiterations2, accepted_cur, accepted/(i*1.0));
+    if(i%100 == 0) fprintf(file, "\t Step %04i,\t mp = %2.8lf,\t pl = %2.4lf,\t cc = %2.4lf,\t tc = %2.1lf,\t C(%i) = %2.10lf,\t C(%i) = %2.10lf,\t C(%i) = %2.10lf,\t dh = %2.8lf,\t cg1 = %d,\t cg2 = %d,\t acc = %d, acctc = %.8f\n", i, mp, pl, cc, tc, (X2 * 3) / 8, C_X2_3_8, X2 / 2, C_X2_2, (X2 * 5) / 8, C_X2_5_8, -dh, g_cgiterations1, g_cgiterations2, accepted_cur, accepted/(i*1.0));
+
+    if( i%10000 == 0 ){
+	    char run_file[100];
+	    sprintf(run_file, "config.%i.%i.b%.1lf.%i",X1,X2,beta,i);
+	    save_gauge(run_file);
+    }
   }
+  fclose(file);
+  fclose(file_correlations);
   
   /* Some output for diagnostics */
   printf("\n\n Algorithm configuration:\n");

@@ -44,7 +44,7 @@ int R;
 int g_cgiterations1;
 int g_cgiterations2;
 
-int update() //Basic HMC update step
+int update(int counter, FILE *file_correlations) //Basic HMC update step
 {
   double squnrm;
   int i, acc;
@@ -83,16 +83,20 @@ int update() //Basic HMC update step
 
   // Add the part for the fermion fields
 
-  // Do the molecular dynamic chain
-  /* the simple LF scheme */
 
-  /* the second order minimal norm multi-timescale integrator*/
-  /* MN2_integrator(g_steps, 2, g_steps*g_stepsize, 0.2); */
-
-  /* This is the recursive implementation */
-  /* in can be found in rec_lf_integrator.c|h */
-  n_steps[0] = 100;
-  leapfrog(n_steps[0], tau/n_steps[0]);
+  if(counter%100 == 0){
+	  // Do the molecular dynamic chain
+	  /* the simple LF scheme */
+	  printf("HMC\n");
+	  fprintf(file_correlations, "HMC\n");
+	  n_steps[0] = 100;
+	  leapfrog(n_steps[0], tau/n_steps[0]);
+  }else{
+	  printf("%i Winding\n", counter);
+	  //fprintf(file_correlations, "Winding\n");
+	  int winding_size = 3;
+	  add_windingN(winding_size);
+  }
   
   // Calculate the new action and hamiltonian
   ham = 0;
@@ -140,6 +144,7 @@ int accept(const double exphdiff)
     }
     else {
       // get the old values for phi, cause the configuration was not accepted
+#pragma parallel for shared(gauge1, gauge2, gauge1_old, gauge2_old)
       for (i=0; i<GRIDPOINTS; i++)
 	{
 	  gauge1[i]=gauge1_old[i];

@@ -1,6 +1,7 @@
 #ifndef _HMC_H
 #define _HMC_H
 
+#include<stdio.h>
 #include "rec_lf_integrator.h"
 
 /***********************************************************************************/
@@ -27,7 +28,7 @@ extern double tau;
 extern int R;  // Counter of all accepted configurations
 extern int g_cgiterations1, g_cgiterations2;
 
-int  update(); //Basic HMC update step
+int  update(int counter, FILE *file_correlations); //Basic HMC update step
 int  accept(const double exphdiff); //Accept or reject the trajectory depending on exphdiff
 void add_windingN(int n); // Do winding of size n
 
