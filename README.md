@@ -21,3 +21,5 @@ use with `no_timescales=1` (defined in `qed.c`).
 with OpenMP.
 - `qed-windingN-HMC1-openmp-notimescales1`: implementation of algorithm
 windingN-HMC1, which performs N winding steps + 1 HMC step.
+- `qed-quenched`: removes fermions.
+- `qed-quenched-openacc`: adds GPU parallelization with OpenACC.
