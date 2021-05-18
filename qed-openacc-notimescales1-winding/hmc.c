@@ -36,6 +36,9 @@
 #include "leapfrog2.h"
 #include "rec_lf_integrator.h"
 #include "hmc.h"
+#ifndef M_PI
+# define M_PI    3.14159265358979323846f
+#endif
 
 
 int R;
@@ -95,7 +98,7 @@ int update() //Basic HMC update step
   cg(g_X, g_fermion, ITER_MAX, DELTACG, &gam5D_SQR_musqr_wilson);
   ham += scalar_prod_r(g_fermion, g_X);
   exphdiff = exp(ham_old-ham);
-  acc = accept(exphdiff);
+  if(thermalizing == 0) acc = accept(exphdiff);
  
 #pragma acc parallel loop present(gauge1[0:GRIDPOINTS], gauge2[0:GRIDPOINTS], gauge1_old[0:GRIDPOINTS], gauge2_old[0:GRIDPOINTS])
   for(i=0; i<GRIDPOINTS; i++) {
@@ -106,6 +109,11 @@ int update() //Basic HMC update step
   
  
   s_g_old = s_g;
+
+  int NW = 100;
+  int winding_size = 3;
+  add_N_windings(NW, winding_size);
+
   return(acc);
 }
 
@@ -140,9 +148,141 @@ int accept(const double exphdiff)
   return acc;
 }
 
+void add_windingN(int n){
+#pragma acc update host(gauge1, gauge2)
+  double r[2];
+  ranlxd(r, 2);
+  int pos = (int) X1*X2*r[0]; 
+  int sign = 1;
+  /* if(r[1]>0.5) sign = -1; */
+  int i,j;
+  int x2  = pos/X1;
+  int x1  = pos%X2;
+
+  double phase[n+1][n+1];
+
+  /* for(i=0;i<n+2;i++) for(j=0;j<n+2;j++) { */
+  /*     pos = idx((i+x1-1+X1)%X1,(j+x2-1+X2)%X2,X1); */
+  /*     //   printf("plaq i j = %d %d, %f \n ",i,j, (gauge1[pos] + gauge2[right1[pos]] - gauge1[right2[pos]] - gauge2[pos]  )); */
+      
+  /*   } */
+  
+
+  for(i=0;i<n+1;i++) for(j=0;j<n+1;j++) {
+      phase[i][j] = 0;
+    }
+
+
+  for(i=0;i<n+1;i++) {
+    phase[0][i] = i*M_PI/(2*n);
+    phase[n][i] = 3*M_PI/2 - i*M_PI/(2*n);
+    phase[i][0] = 2*M_PI - i*M_PI/(2*n);
+    phase[i][n] = M_PI/2 + i*M_PI/(2*n);
+  }
+  phase[0][0] = 2*M_PI;
+
+  int zero =0;
+  
+  for(i=0;i<n;i++) for(j=0;j<n;j++) {
+      zero = 0;
+      pos = idx((i+x1)%X1,(j+x2)%X2,X1);
+      
+      if(i==0&&j==0) zero=1.;
+
+      if(j+1<n+1) gauge2[pos] += sign*(phase[i][j+1]-phase[i][j] - zero*2*M_PI);
+      if(i+1<n+1) gauge1[pos] += sign*(phase[i+1][j]-phase[i][j]);
+    }
+  
+  for(j=0;j<n;j++) {
+    pos = idx((n+x1)%X1,(j+x2)%X2,X1);
+    gauge2[pos] += sign*(phase[n][j+1]-phase[n][j]) ;
+  }
+  for(j=0;j<n;j++) {
+    pos = idx((j+x1)%X1,(n+x2)%X2,X1);
+    gauge1[pos] += sign*(phase[j+1][n]-phase[j][n]);
+  }
+  
+  for(i=0;i<n+2;i++) for(j=0;j<n+2;j++) {
+      pos = idx((i+x1-1+X1)%X1,(j+x2-1+X2)%X2,X1);
+      //      printf("plaq i j = %d %d, %f \n ",i,j, (gauge1[pos] + gauge2[right1[pos]] - gauge1[right2[pos]] - gauge2[pos]  ));
+           
+    }
 
 
 
+  /*
+    for(i=0;i<6;i++){
+      pos = idx((i+x1)%X1,(X2-1+x2)%X2,X1);      
+      gauge2[pos] += sign*(phase[i][0]);
+      pos = idx((i+x1)%X1,(X2+5+x2)%X2,X1);      
+      gauge2[pos] += sign*(-phase[i][5]);
+      pos = idx((X1-1+x1)%X1,(i+x2)%X2,X1);
+      gauge1[pos] += sign*(phase[0][i]);
+      pos = idx((X1+5+x1)%X1,(i+x2)%X2,X1);
+      gauge1[pos] += sign*(-phase[5][i]);
+      
+    }
+  */
+#pragma acc update device(gauge1, gauge2)
+  calculatelinkvars();
 
+}
 
+void add_N_windings(int NW, int winding_size)
+{
+  double squnrm;
+  int i, iW, acc=0;
+  double exphdiff;
+  double Wham_old, Wham;
+  
+	for(iW=0; iW<NW; iW++)
+	{
+  /* Now create the field and calculate its contributions to the action (end of the 'misuse') */
+  /* squnrm is the fermion part of the action : */
+  /*   S = R^dagger * R  =  g_fermion^dag * D^{-1 dag} * D^{-1} * g_fermion = g_fermion Q^-1 g_fermion */
 
+  /* PF1 det(1/(Q^2 + mu^2)) */
+  Wham_old = s_g_old;
+  for(i=0; i<GRIDPOINTS; i++) {
+    g_X[i].s1 = (gauss() + I*gauss())/sqrt(2); //Gaussian fields R
+    g_X[i].s2 = (gauss() + I*gauss())/sqrt(2);
+  }
+
+#pragma acc update device(g_X)
+  squnrm = square_norm(g_X);
+  // step iv): g_fermion = \phi = K^dag * g_X = K^dag * \xi
+  gam5D_wilson(g_fermion, g_X);
+  /* assign_diff_mul(g_fermion, g_X, 0.+I*sqrt(g_musqr)); */
+  Wham_old += squnrm;
+
+		add_windingN(winding_size);
+
+  // Calculate the new action and hamiltonian
+  Wham = 0;
+  s_g = 0;
+#pragma acc parallel loop present(gauge1[0:GRIDPOINTS], gauge2[0:GRIDPOINTS], right1[0:GRIDPOINTS], right2[0:GRIDPOINTS], gp1[0:GRIDPOINTS], gp2[0:GRIDPOINTS]) reduction(+:s_g,Wham) 
+  for (i=0; i<GRIDPOINTS; i++) {
+    s_g += -beta*cos(gauge1[i] + gauge2[right1[i]] - gauge1[right2[i]] - gauge2[i]);
+  }
+  /* Sum_ij [(g_fermion^*)_i (Q^-1)_ij (g_fermion)_j]  =  Sum_ij [(g_fermion^*)_i (g_X)_i] */
+  Wham += s_g;
+  // add in the part for the fermion fields.
+  cg(g_X, g_fermion, ITER_MAX, DELTACG, &gam5D_SQR_musqr_wilson);
+  Wham += scalar_prod_r(g_fermion, g_X);
+  /* printf("Windind dh = %lf\n", Wham-Wham_old); */
+  exphdiff = exp(Wham_old-Wham);
+  acc += accept(exphdiff);
+
+#pragma acc parallel loop present(gauge1[0:GRIDPOINTS], gauge2[0:GRIDPOINTS], gauge1_old[0:GRIDPOINTS], gauge2_old[0:GRIDPOINTS])
+  for(i=0; i<GRIDPOINTS; i++) {
+    gauge1_old[i]=gauge1[i];
+    gauge2_old[i]=gauge2[i];
+  }
+
+  
+ 
+  s_g_old = s_g;
+	}
+  /* printf("Windind dh = %lf\n", Wham-Wham_old); */
+  printf("Accepted = %i\n", acc);
+}

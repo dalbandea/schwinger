@@ -19,6 +19,7 @@
 int g_thermalize = 500;      //Number of MC updates for thermalization
 int g_measurements = 1000;  //Number of measurements (statistically independent configurations)
 int g_intermediate = 0;    //Number of MC updates between the measurements
+int thermalizing = 0;
 /* extern in hmc.h      */
 double ham = 0, ham_old = 0;
 /* The critical mass at beta=1.0 is about 0.32 */
@@ -150,6 +151,7 @@ int main(int argc, char **argv)
   {
   /* Initialize the fields */
   coldstart();
+  /* hotstart(); */
   /* Print out the run parameters */
   echo_sim_params(); 
   
@@ -168,6 +170,7 @@ int main(int argc, char **argv)
   }
   else
   {
+	  thermalizing = 1;
 
   for(i=0; i<g_thermalize; i++)
   {
@@ -190,6 +193,7 @@ int main(int argc, char **argv)
 #pragma acc update host(gauge1, gauge2)
     save_gauge(dump_filename);
   }
+  thermalizing=0;
   /* accepted = 0; */
   
   /* // re-initialize the random number generator, */

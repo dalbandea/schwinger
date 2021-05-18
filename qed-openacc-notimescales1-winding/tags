@@ -6,7 +6,7 @@
 !_TAG_PROGRAM_VERSION	5.9~svn20110310	//
 BASE	rand/ranlxd.c	353;"	d	file:
 BASE	rand/ranlxs.c	351;"	d	file:
-CC	Makefile	/^CC = pgcc -acc -gpu=cc75 -gpu=fastmath -Minfo -std=c99 -Wall -O3$/;"	m
+CC	Makefile	/^CC = pgcc -acc -gpu=cc75 -Minfo=accel -std=c99 -Wall -O3 -lm$/;"	m
 DELTACG	hmc.h	13;"	d
 DS_G1	fields.c	/^double DS_G1(int i)$/;"	f
 DS_G2	fields.c	/^double DS_G2(int i)$/;"	f
@@ -26,6 +26,7 @@ MN2_integrator	2MN_integrator.c	/^void MN2_integrator(const int n1, const int n2
 MONITOR_CG_PROGRESS	linalg.h	7;"	d
 M_PI	dirac.c	26;"	d	file:
 M_PI	fields.c	4;"	d	file:
+M_PI	hmc.c	40;"	d	file:
 M_PI	measurements.c	12;"	d	file:
 M_PI	rand/gauss.c	7;"	d	file:
 M_PI_2	measurements.c	13;"	d	file:
@@ -246,7 +247,9 @@ __unbounded	complex/cdefs.h	116;"	d
 __volatile	complex/cdefs.h	63;"	d
 accept	hmc.c	/^int accept(const double exphdiff)$/;"	f
 add	linalg.c	/^void add(spinor *Q, spinor *R, spinor *S)$/;"	f
+add_N_windings	hmc.c	/^void add_N_windings(int N, int winding_size)$/;"	f
 add_statistics_entry	statistics.c	/^void add_statistics_entry(statistics_data *data, double entry)$/;"	f
+add_windingN	hmc.c	/^void add_windingN(int n){$/;"	f
 assign	linalg.c	/^void assign(spinor *R, spinor *S)$/;"	f
 assign_add_mul	linalg.c	/^void assign_add_mul(spinor *P, spinor *Q, complex double c)$/;"	f
 assign_add_mul_r	linalg.c	/^void assign_add_mul_r(spinor *P, spinor *Q, double c)$/;"	f

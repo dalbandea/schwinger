@@ -15,6 +15,7 @@
 /* declared in qed.c */
 
 extern double ham, ham_old;
+extern int thermalizing;
 
 /* The following we need for the recursive integration scheme */
 /* the integration step numbers for the different time scales */
@@ -29,5 +30,7 @@ extern int g_cgiterations1, g_cgiterations2;
 
 int  update(); //Basic HMC update step
 int  accept(const double exphdiff); //Accept or reject the trajectory depending on exphdiff
+void add_windingN(int n);
+void add_N_windings(int NW, int winding_size);
 
 #endif
