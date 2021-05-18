@@ -30,7 +30,7 @@ void update_momenta(const double dtau)
   g_cgiterations1 += cg(g_X, g_fermion, ITER_MAX, DELTACG, &gam5D_SQR_wilson);
   gam5D_wilson(g_gam5DX, g_X);
 
-#pragma parallel for shared(gp1, gp2, dtau)
+#pragma omp parallel for shared(gp1, gp2, dtau)
   for(i = 0; i < GRIDPOINTS; i++) {
     gp1[i] = gp1[i] - dtau*(DS_G1(i) - trX_dQ_wilson_dalpha1_X(i));
     gp2[i] = gp2[i] - dtau*(DS_G2(i) - trX_dQ_wilson_dalpha2_X(i));
@@ -41,7 +41,7 @@ void update_momenta(const double dtau)
 void update_gauge(const double dtau) {
   int i;
 
-#pragma parallel for shared(gp1, gp2, dtau)
+#pragma omp parallel for shared(gp1, gp2, dtau)
   for(i = 0; i < GRIDPOINTS; i++) {
     gauge1[i] = gauge1[i] + dtau*gp1[i];
     gauge2[i] = gauge2[i] + dtau*gp2[i];
