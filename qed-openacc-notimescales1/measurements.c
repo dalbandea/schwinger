@@ -17,6 +17,7 @@ double mean_plaquette()
 {
  int i;
  double mp = 0.0;
+#pragma acc parallel loop present(gauge1[0:GRIDPOINTS], gauge2[0:GRIDPOINTS], right1[0:GRIDPOINTS], right2[0:GRIDPOINTS]) reduction(+:mp) copy(mp)
  for(i=0; i<GRIDPOINTS; i++)
  {
   mp += cos(gauge1[i] + gauge2[right1[i]] - gauge1[right2[i]] - gauge2[i]);
@@ -31,6 +32,7 @@ double polyakov_loop()
   complex double pl;
   double apl = 0.0;
   calculatelinkvars();      
+#pragma acc update host(link2)
   for(x1=0; x1<X1; x1++) {
     pl = 1.0 + I*0.0;
     for(x2=0; x2<X2; x2++) {
@@ -49,21 +51,30 @@ double chiral_condensate()
  q1 = 0.0 + I*0.0;
  q2 = 0.0 + I*0.0;
 
+#pragma acc data copyin(S0, S, R1, R2)
+	{
  //To calculate D^{-1}(x,x), we invert solve the equation D R  = S
  //Where the source S is only nonzero at x and for different spinor components
  //The required number of sources is the number of spinor components
  // Source 1
  set_zero(S0);
+#pragma acc update host(S0)
  S0[i0].s1 = 1.0 + I*0.0;
+#pragma acc update device(S0)
  gam5D_wilson(S, S0);
  cg(R1, S, ITER_MAX, DELTACG, &gam5D_SQR_wilson); //Inverting the Dirac operator on source 1
+#pragma acc update host(R1)
  q1 += R1[i0].s1;
  // Source 2
  set_zero(S0);
+#pragma acc update host(S0)
  S0[i0].s2 = 1.0 + I*0.0;
+#pragma acc update device(S0)
  gam5D_wilson(S, S0);
  cg(R2, S, ITER_MAX, DELTACG, &gam5D_SQR_wilson); //Inverting the Dirac operator on source 2
+#pragma acc update host(R2)
  q2 += R2[i0].s2;
+	}
  
  if(fabs(cimag(q1 - q2))>sqrt(DELTACG))
  {
@@ -113,6 +124,7 @@ double pcac_correlation_function(int t)
 double topological_charge()
 {
   double tmp = 0;
+#pragma acc parallel loop present(gauge1[0:GRIDPOINTS], gauge2[0:GRIDPOINTS], right1[0:GRIDPOINTS], right2[0:GRIDPOINTS]) reduction(+:tmp) copy(tmp)
   for (int i = 0; i < GRIDPOINTS; i ++)
   {
     double val = gauge1[i] + gauge2[right1[i]] - gauge1[right2[i]] - gauge2[i];

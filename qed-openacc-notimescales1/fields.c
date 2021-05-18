@@ -11,6 +11,7 @@
 
 spinor g_fermion[GRIDPOINTS], g_fermion2[GRIDPOINTS], g_X[GRIDPOINTS], g_gam5DX[GRIDPOINTS], g_temp[GRIDPOINTS];
 double gauge1[GRIDPOINTS], gauge2[GRIDPOINTS], gauge1_old[GRIDPOINTS], gauge2_old[GRIDPOINTS];
+/* #pragma acc declare create(gauge1) */
 complex double link1[GRIDPOINTS], link2[GRIDPOINTS];
 double gp1[GRIDPOINTS], gp2[GRIDPOINTS];
 double s_g, s_g_old;
@@ -37,6 +38,7 @@ double DS_G2(int i)
 void coldstart()
 {
  int i;
+#pragma acc parallel loop present(gauge1, gauge2, gauge1_old, gauge2_old)
  for(i=0; i<GRIDPOINTS; i++)
  {
   gauge1[i]     = 0.0;
@@ -46,8 +48,9 @@ void coldstart()
  };
  calculatelinkvars();
  s_g=0;
+#pragma acc parallel loop reduction(+:s_g) present(gauge1[0:GRIDPOINTS], gauge2[0:GRIDPOINTS], right1[0:GRIDPOINTS], right2[0:GRIDPOINTS]) copy(s_g)
  for(i=0; i<GRIDPOINTS; i++)
-  s_g += S_G(i);
+  s_g += -beta*cos(gauge1[i] + gauge2[right1[i]] - gauge1[right2[i]] - gauge2[i]);
  s_g_old = s_g;
 }
 
@@ -56,6 +59,7 @@ void hotstart()
  int i;
  double r[GRIDPOINTS*2];
  ranlxd(r, GRIDPOINTS*2);
+#pragma acc parallel loop present(link1[0:GRIDPOINTS], link2[0:GRIDPOINTS], gauge1[0:GRIDPOINTS], gauge2[0:GRIDPOINTS])
  for(i=0; i<GRIDPOINTS; i++)
  {
   gauge1[i]=2*M_PI*r[i]-M_PI;
@@ -65,14 +69,16 @@ void hotstart()
  }
  calculatelinkvars();
  s_g=0;
+#pragma acc parallel loop reduction(+:s_g) present(gauge1[0:GRIDPOINTS], gauge2[0:GRIDPOINTS], right1[0:GRIDPOINTS], right2[0:GRIDPOINTS]) copy(s_g)
  for(i=0; i<GRIDPOINTS; i++)
-  s_g += S_G(i);
+  s_g += -beta*cos(gauge1[i] + gauge2[right1[i]] - gauge1[right2[i]] - gauge2[i]);
  s_g_old=s_g;
 }
 
 int calculatelinkvars()
 {
  int i;
+#pragma acc parallel loop present(link1[0:GRIDPOINTS], link2[0:GRIDPOINTS], gauge1[0:GRIDPOINTS], gauge2[0:GRIDPOINTS])
  for(i=0; i<GRIDPOINTS; i++)
  {
   link1[i] = cos(gauge1[i]) + I*sin(gauge1[i]);

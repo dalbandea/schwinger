@@ -24,6 +24,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <complex.h>
+#include <omp.h>
 #include "rand/ranlxd.h"
 #include "rand/gauss.h"
 #include "linalg.h"
@@ -50,7 +51,7 @@ int update() //Basic HMC update step
   /* the new impulses and the 'generator' of the arbitrary pseudofield */
   /* calculate the hamiltonian of this state: new impulses + action */
   /* g_X is ab-used a bit - here it is \xi = (gamma5 D)^{-1} \phi */
-  
+
   ham_old = s_g_old;
   for(i=0; i<GRIDPOINTS; i++) {
     gp1[i] = gauss();
@@ -67,47 +68,25 @@ int update() //Basic HMC update step
     g_X[i].s1 = (gauss() + I*gauss())/sqrt(2); //Gaussian fields R
     g_X[i].s2 = (gauss() + I*gauss())/sqrt(2);
   }
+
+#pragma acc update device(g_X)
+#pragma acc update device(gp1, gp2) async(1)
   squnrm = square_norm(g_X);
-  
   // step iv): g_fermion = \phi = K^dag * g_X = K^dag * \xi
   gam5D_wilson(g_fermion, g_X);
-  assign_diff_mul(g_fermion, g_X, 0.+I*sqrt(g_musqr));
+  /* assign_diff_mul(g_fermion, g_X, 0.+I*sqrt(g_musqr)); */
   ham_old += squnrm;
 
-  /* PF2 det((Q^2 + mu^2)/Q^2) */
-  if(no_timescales > 2) {
-    for(i=0; i<GRIDPOINTS; i++) {
-      g_X[i].s1 = (gauss() + I*gauss())/sqrt(2); //Gaussian fields R
-      g_X[i].s2 = (gauss() + I*gauss())/sqrt(2);
-    }
-    squnrm = square_norm(g_X);
-
-    cg(g_fermion2, g_X, ITER_MAX, DELTACG, &gam5D_SQR_musqr_wilson);    
-    gam5D_wilson(g_gam5DX, g_fermion2);
-    assign_add_mul(g_gam5DX, g_fermion2, 0.+I*sqrt(g_musqr));
-    gam5D_wilson(g_fermion2, g_gam5DX);
-    ham_old += squnrm;
-  }
-  // Add the part for the fermion fields
-
-  // Do the molecular dynamic chain
-  /* the simple LF scheme */
-
-  /* the second order minimal norm multi-timescale integrator*/
-  /* MN2_integrator(g_steps, 2, g_steps*g_stepsize, 0.2); */
-
-  /* This is the recursive implementation */
-  /* in can be found in rec_lf_integrator.c|h */
-  if (no_timescales == 1)
+  n_steps[0] = 100;
+#pragma acc wait(1)
     leapfrog(n_steps[0], tau/n_steps[0]);
-  else
-    integrate_leap_frog(tau/n_steps[no_timescales-1], no_timescales-1, no_timescales, n_steps, 1, up_momenta);
   
   // Calculate the new action and hamiltonian
   ham = 0;
   s_g = 0;
+#pragma acc parallel loop present(gauge1[0:GRIDPOINTS], gauge2[0:GRIDPOINTS], right1[0:GRIDPOINTS], right2[0:GRIDPOINTS], gp1[0:GRIDPOINTS], gp2[0:GRIDPOINTS]) reduction(+:s_g,ham) 
   for (i=0; i<GRIDPOINTS; i++) {
-    s_g += S_G(i);
+    s_g += -beta*cos(gauge1[i] + gauge2[right1[i]] - gauge1[right2[i]] - gauge2[i]);
     ham += 0.5*(gp1[i]*gp1[i] + gp2[i]*gp2[i]);
   }
   /* Sum_ij [(g_fermion^*)_i (Q^-1)_ij (g_fermion)_j]  =  Sum_ij [(g_fermion^*)_i (g_X)_i] */
@@ -115,20 +94,16 @@ int update() //Basic HMC update step
   // add in the part for the fermion fields.
   cg(g_X, g_fermion, ITER_MAX, DELTACG, &gam5D_SQR_musqr_wilson);
   ham += scalar_prod_r(g_fermion, g_X);
-  
-  if(no_timescales > 2) {
-    cg(g_gam5DX, g_fermion2, ITER_MAX, DELTACG, &gam5D_SQR_wilson);
-    gam5D_SQR_musqr_wilson(g_X, g_temp, g_gam5DX);
-    ham += scalar_prod_r(g_fermion2, g_X);
-  }
-
   exphdiff = exp(ham_old-ham);
   acc = accept(exphdiff);
  
+#pragma acc parallel loop present(gauge1[0:GRIDPOINTS], gauge2[0:GRIDPOINTS], gauge1_old[0:GRIDPOINTS], gauge2_old[0:GRIDPOINTS])
   for(i=0; i<GRIDPOINTS; i++) {
     gauge1_old[i]=gauge1[i];
     gauge2_old[i]=gauge2[i];
   }
+
+  
  
   s_g_old = s_g;
   return(acc);
@@ -152,6 +127,7 @@ int accept(const double exphdiff)
     }
     else {
       // get the old values for phi, cause the configuration was not accepted
+#pragma acc parallel loop present(gauge1[0:GRIDPOINTS], gauge2[0:GRIDPOINTS], gauge1_old[0:GRIDPOINTS], gauge2_old[0:GRIDPOINTS])
       for (i=0; i<GRIDPOINTS; i++)
 	{
 	  gauge1[i]=gauge1_old[i];

@@ -38,31 +38,34 @@
 // gamma_1/2 -> sigma_1/2, gamma_5 -> sigma_3, gamma_5 vorne dran
 void gam5D_wilson(spinor *out, spinor *in) {
   int i;
-  double factor = (2*g_R + g_mass);
+#pragma acc parallel loop present(out[0:GRIDPOINTS], in[0:GRIDPOINTS], left1[0:GRIDPOINTS], left2[0:GRIDPOINTS], right1[0:GRIDPOINTS], right2[0:GRIDPOINTS], link1[0:GRIDPOINTS], link2[0:GRIDPOINTS])
   for(i=0; i<GRIDPOINTS; i++) {
-    complex double link1_i = link1[i];
-    spinor in_i = in[i];
-    int left1_i = left1[i];
-    int left2_i = left2[i];
-    int right1_i = right1[i];
-    int right2_i = right2[i];
-    spinor in_right1_i = in[right1_i];
-    spinor in_right2_i = in[right2_i];
-    spinor in_left1_i = in[left1_i];
-    spinor in_left2_i = in[left2_i];
-    complex double cconj_link1_left1_i = cconj(link1[left1_i]);
-    complex double cconj_link2_left2_i = cconj(link2[left2_i]);
-    out[i].s1 = factor * in_i.s1 - 
-    0.5*(link1_i*(g_R*in_right1_i.s1 - in_right1_i.s2) +
-         cconj_link1_left1_i * ( g_R*in_left1_i.s1  +   in_left1_i.s2)  +
-         link2[i] * ( g_R*in_right2_i.s1 + I*in_right2_i.s2) +
-         cconj_link2_left2_i * ( g_R*in_left2_i.s1  - I*in_left2_i.s2));
-    
-    out[i].s2 = - factor * in_i.s2 -
-    0.5*(link1_i * (   in_right1_i.s1 - g_R*in_right1_i.s2) -
-         cconj_link1_left1_i * (in_left1_i.s1  + g_R*in_left1_i.s2)  +
-         link2[i] * ( I*in_right2_i.s1 - g_R*in_right2_i.s2) -
-         cconj_link2_left2_i * (I*in_left2_i.s1  + g_R*in_left2_i.s2));
+	  double factor = (2*g_R + g_mass);
+	  complex double link1_i = link1[i];
+	  spinor in_i = in[i];
+	  int left1_i = left1[i];
+	  int left2_i = left2[i];
+	  int right1_i = right1[i];
+	  int right2_i = right2[i];
+	  spinor in_right1_i = in[right1_i];
+	  spinor in_right2_i = in[right2_i];
+	  spinor in_left1_i = in[left1_i];
+	  spinor in_left2_i = in[left2_i];
+	  complex double cconj_link1_left1_i = cconj(link1[left1_i]);
+	  complex double cconj_link2_left2_i = cconj(link2[left2_i]);
+	  out[i].s1 = factor * in_i.s1 - 
+		  0.5*(link1_i*(g_R*in_right1_i.s1 - in_right1_i.s2) +
+				  cconj_link1_left1_i * ( g_R*in_left1_i.s1  +   in_left1_i.s2)  +
+				  link2[i] * ( g_R*in_right2_i.s1 + I*in_right2_i.s2) +
+				  cconj_link2_left2_i * ( g_R*in_left2_i.s1  - I*in_left2_i.s2));
+
+
+	  out[i].s2 = - factor * in_i.s2 -
+		  0.5*(link1_i * (   in_right1_i.s1 - g_R*in_right1_i.s2) -
+				  cconj_link1_left1_i * (in_left1_i.s1  + g_R*in_left1_i.s2)  +
+				  link2[i] * ( I*in_right2_i.s1 - g_R*in_right2_i.s2) -
+				  cconj_link2_left2_i * (I*in_left2_i.s1  + g_R*in_left2_i.s2));
+	  /* printf("Dentrisimo: %lf\n",creal((out[i]).s1)); */
   }
   return;
 }

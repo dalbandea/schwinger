@@ -5,6 +5,8 @@
 #include <getopt.h>
 #include <string.h>
 #include <unistd.h>
+#include <omp.h>
+#include <openacc.h>
 
 #include "statistics.h"
 #include "lattice.h"
@@ -36,7 +38,7 @@ void load_gauge(const char *filename);
 int n_steps[3];
 /* list of function pointers to the momentum update functions */
 up_m up_momenta[3];
-int no_timescales = 3;
+int no_timescales = 1;
 double tau = 1.;
 
 int main(int argc, char **argv) 
@@ -144,6 +146,8 @@ int main(int argc, char **argv)
   rlxd_init(2, 123456); 
   /* Initialize the lattice geometry */
   init_lattice(X1, X2);
+#pragma acc data create(g_fermion, g_X, gp1, gp2) copyin(gauge1[0:GRIDPOINTS], gauge2[0:GRIDPOINTS], gauge1_old[0:GRIDPOINTS], gauge2_old[0:GRIDPOINTS], g_gam5DX[0:GRIDPOINTS], link1[0:GRIDPOINTS], link2[0:GRIDPOINTS], right1[0:GRIDPOINTS], right2[0:GRIDPOINTS], left1[0:GRIDPOINTS], left2[0:GRIDPOINTS])
+  {
   /* Initialize the fields */
   coldstart();
   /* Print out the run parameters */
@@ -153,34 +157,44 @@ int main(int argc, char **argv)
   printf("\n Thermalization: \n\n");
   char dump_filename[1000];
   sprintf(dump_filename, "dumps/beta=%lf mass=%lf X1=%i X2=%i.dmp", beta, g_mass, X1, X2);
-  
+
+
   if (access(dump_filename, F_OK) != -1)
   {
     // dump exists, so just load it
     load_gauge(dump_filename);
+#pragma acc update device(gauge1, gauge2, gauge1_old, gauge2_old)
     calculatelinkvars();
   }
   else
   {
-    for(i=0; i<g_thermalize; i++)
-    {
-      accepted += update();
-      printf("\t Step %04i,\t mp = %2.4lf,\t pl = %2.4lf,\t cc = %2.4lf\t dh = %2.4lf,\tcg1 = %d,\tcg2 = %d\n", i, mean_plaquette(), polyakov_loop(), chiral_condensate(), ham-ham_old, g_cgiterations1, g_cgiterations2);
-      g_cgiterations1 = 0;
-      g_cgiterations2 = 0;
-    }
+
+  for(i=0; i<g_thermalize; i++)
+  {
+	  double start;
+	  double end;
+	  start = omp_get_wtime();
+	  g_cgiterations1 = 0;
+	  accepted += update();
+	  printf("\t Step %04i,\t mp = %2.4lf,\t tc = %2.1lf,\t pl = %2.4lf,\t cc = %2.4lf\t dh = %2.4lf,\tcg1 = %d,\tcg2 = %d\n", i, mean_plaquette(), topological_charge(), polyakov_loop(), chiral_condensate(), ham-ham_old, g_cgiterations1, g_cgiterations2);
+	  g_cgiterations1 = 0;
+	  g_cgiterations2 = 0;
+	  end = omp_get_wtime();
+	  printf("Work took %f seconds\n", end - start);
+  }
     if (accepted < g_thermalize * thermalize_min_acc)
     {
       printf("Acceptance ratio %0.2f too low, aborting...\n", accepted / (double)g_thermalize);
       exit(1);
     }
+#pragma acc update host(gauge1, gauge2)
     save_gauge(dump_filename);
   }
-  accepted = 0;
+  /* accepted = 0; */
   
-  // re-initialize the random number generator,
-  // because the thermalization may have been omitted
-  rlxd_init(2, 123456);
+  /* // re-initialize the random number generator, */
+  /* // because the thermalization may have been omitted */
+  /* rlxd_init(2, 123456); */
   
   /* measure the iterations only during real simulation, not thermalization */
   R = 0;               //Total number of rejected configurations
@@ -274,7 +288,7 @@ int main(int argc, char **argv)
     total_cgiterations1 += g_cgiterations1;
     total_cgiterations2 += g_cgiterations2;
     
-    printf("\t Step %04i,\t mp = %2.8lf,\t pl = %2.4lf,\t cc = %2.4lf,\t tc = %2.1lf,\t C(%i) = %2.10lf,\t C(%i) = %2.10lf,\t C(%i) = %2.10lf,\t dh = %2.8lf,\t cg1 = %d,\t cg2 = %d,\t acc = %d\n", i, mp, pl, cc, tc, (X2 * 3) / 8, C_X2_3_8, X2 / 2, C_X2_2, (X2 * 5) / 8, C_X2_5_8, -dh, g_cgiterations1, g_cgiterations2, accepted_cur);
+    printf("\t Step %04i,\t mp = %2.8lf,\t pl = %2.4lf,\t cc = %2.4lf,\t tc = %2.1lf,\t C(%i) = %2.10lf,\t C(%i) = %2.10lf,\t C(%i) = %2.10lf,\t dh = %2.8lf,\t cg1 = %d,\t cg2 = %d,\t acc = %d,\t tacc = %lf\n", i, mp, pl, cc, tc, (X2 * 3) / 8, C_X2_3_8, X2 / 2, C_X2_2, (X2 * 5) / 8, C_X2_5_8, -dh, g_cgiterations1, g_cgiterations2, accepted_cur, ((double) accepted)/((double) i+1.0));
   }
   
   /* Some output for diagnostics */
@@ -303,7 +317,7 @@ int main(int argc, char **argv)
   printf("\n\n Mean values:\n");
   print_statistics_data(&mp_statistics, "Plaquette:", 1);
   printf("\t Plaquette autocorrelation time:       %g\n", autocorrelation_time(mp_measurements, g_measurements));
-  print_statistics_data(&pl_statistics, "Polyakov loop:", 1);
+  /* print_statistics_data(&pl_statistics, "Polyakov loop:", 1); */
   print_statistics_data(&cc_statistics, "Chiral Condensate:", 1);
   print_statistics_data(&tc_statistics, "Topological Charge:", 1);
   printf("\t Topological Charge autocorrelation time:       %g\n", autocorrelation_time(tc_measurements, g_measurements));
@@ -324,6 +338,7 @@ int main(int argc, char **argv)
   
   free(mp_measurements);
   free(tc_measurements);
+  } //pragma data close
   
   free(left1);
   free(left2);

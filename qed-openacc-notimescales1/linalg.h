@@ -34,6 +34,7 @@ void mul_c(spinor *R, complex double c, spinor *S);           // R = c S, c is c
 double square_norm(spinor *P);                                // (P, P*)
 void add(spinor *Q, spinor *R, spinor *S);                    // Q = R + S
 
+#pragma acc routine seq
 spinor gamma5_i(spinor s);                                    //Multiplies s by gamma_5
 void gamma5(spinor *out, spinor *in);                         //out = gamma_5 in
 

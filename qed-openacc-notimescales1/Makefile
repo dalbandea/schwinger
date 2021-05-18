@@ -1,4 +1,11 @@
-CC = gcc -std=c99 -Werror -Wall -O3
+# CC = gcc -Ofast -fopenmp -std=c99 -Wall -O3
+# CC = gcc -fopenacc -std=c99 -Wall -O3 -lm -static -fcf-protection=none -foffload=-lm -fstack-protector
+# CC = gcc -fopenacc -std=c99 -Wall -O3 -fcf-protection=check
+# CC = pgcc -acc -gpu=cc75 -gpu=fastmath -Minfo -std=c99 -Wall -O3
+CC = pgcc -acc -gpu=cc75 -Minfo=accel -std=c99 -Wall -O3 -lm
+# CC = pgcc -acc -Minfo=acc -gpu=cc75 -std=c99 -Wall -O3 -lm -fast
+# CC = pgcc -acc -Minfo=acc -std=c99 -Wall -O3 -Kieee -lm
+# CC = pgcc -std=c99 -Wall -O3 -lm
 
 all: qed
 
